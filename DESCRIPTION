@@ -1,0 +1,17 @@
+Package: terraTCGAdata
+Type: Package
+Title: OpenAccess TCGA Data on Terra as MultiAssayExperiment
+Version: 0.1.0
+Authors@R: person(
+    "Marcel", "Ramos", "M.", "marcel.ramosperez@roswellpark.org",
+    c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
+  )
+Description: Leverage the existing open access TCGA data on Terra with
+    well-established Bioconductor infrastructure. Make use of the Terra
+    data model without learning its complexities. With a few functions,
+    you can copy / download and generate a MultiAssayExperiment from the
+    TCGA example workspaces provided by Terra.
+Depends: AnVIL
+License: Artistic-2.0
+Encoding: UTF-8
+RoxygenNote: 7.1.2
