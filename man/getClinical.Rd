@@ -2,9 +2,13 @@
 % Please edit documentation in R/interface.R
 \name{getClinical}
 \alias{getClinical}
-\title{Get the list of clinical datasets}
+\title{Obtain clinical data}
 \usage{
-getClinical(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+getClinical(
+  tablename = "sample",
+  metacols = .PARTICIPANT_METADATA_COLS,
+  columnName = NULL
+)
 }
 \arguments{
 \item{tablename}{The terra data model table from which to extract the
@@ -12,13 +16,16 @@ clinical data (default: "sample")}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the `.PARTICIPANT_METADATA_COLS` global variable}
+
+\item{columnName}{The name of the column to extract files, see
+`getClinicalFiles` table.}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,
     `gs://firecloud...`
 }
 \description{
-Get the list of clinical datasets
+Obtain clinical data
 }
 \examples{
 
