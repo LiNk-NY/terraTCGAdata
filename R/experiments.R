@@ -1,3 +1,12 @@
+#' Obtain a reference table for assay data in the Terra data model
+#'
+#' The column names in the output can be used in the `getAssayData` function.
+#'
+#' @inheritParams getAssayData
+#'
+#' @return A tibble of pointers to resources within the Terra data model
+#'
+#' @export
 getAssayTable <-
     function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
 {
@@ -9,9 +18,23 @@ getAssayTable <-
 
 # assayName <- "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data"
 
+#' Obtain assay datasets from Terra
+#'
+#' @inheritParams getClinical
+#'
+#' @param assayName character() The name of the assay dataset column from
+#'     `getAssayTable` to import into the current workspace.
+#'
+#' @param sampleCode character(1) The sample code used to filtering samples
+#'     e.g., "01" for Primary Solid Tumors, see
+#'     `data("sampleTypes", package = "TCGAutils")` for reference
+#'
+#' @return An `ExperimentList` of assays selected
+#'
+#' @export
 getAssayData <-
-    function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS,
-        assayName, sampleCode = "01")
+    function(assayName, sampleCode = "01", tablename = "sample",
+        metacols = .PARTICIPANT_METADATA_COLS)
 {
     if (missing(assayName))
         stop("Select an assay name from 'getAssayTable'")

@@ -6,23 +6,23 @@
 \usage{
 getClinical(
   tablename = "sample",
-  metacols = .PARTICIPANT_METADATA_COLS,
+  participants = TRUE,
   columnName = NULL,
-  participants = TRUE
+  metacols = .PARTICIPANT_METADATA_COLS
 )
 }
 \arguments{
 \item{tablename}{The terra data model table from which to extract the
 clinical data (default: "sample")}
 
-\item{metacols}{The set of columns that comprise of the metadata columns.
-See the `.PARTICIPANT_METADATA_COLS` global variable}
+\item{participants}{logical(1) Whether to merge the participant table
+from `avtable("participant")` to the clinical data}
 
 \item{columnName}{The name of the column to extract files, see
 `getClinicalTable` table.}
 
-\item{participants}{logical(1) Whether to merge the participant table
-from `avtable("participant")` to the clinical data}
+\item{metacols}{The set of columns that comprise of the metadata columns.
+See the `.PARTICIPANT_METADATA_COLS` global variable}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,

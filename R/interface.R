@@ -1,6 +1,25 @@
 .PARTICIPANT_METADATA_COLS <-
     c("sample_id", "sample_type", "participant", "tcga_sample_id")
 
+#' Obtain the reference table for clinical data
+#'
+#' The column names in the output table can be used in the `getClinical`
+#' function.
+#'
+#' @inheritParams getClinical
+#'
+#' @return A tibble with reference links to data resources on Terra
+#'
+#' @export
+getClinicalTable <-
+    function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+{
+    samples <- avtable(tablename)
+    metadata <- samples[, metacols]
+    samples <- samples[, !names(samples) %in% participant_meta]
+    samples[, grep("clin", names(samples))]
+}
+
 #' Obtain clinical data
 #'
 #' @param tablename The terra data model table from which to extract the
@@ -25,11 +44,12 @@
 #' getClinical()
 #'
 getClinical <-
-    function(tablename = "sample", participants = TRUE, columnName = NULL,
+    function(columnName, participants = TRUE, tablename = "sample",
         metacols = .PARTICIPANT_METADATA_COLS)
 {
     allclin <- getClinicalTable(tablename = tablename, metacols = metacols)
-    if (is.null(columnName))
+    stopifnot(.is_scalar_character(columnName))
+    if (missing(columnName))
         columnName <- names(allclin)[1L]
     clinfiles <- unlist(unique(allclin[, columnName]))
     bfc <- BiocFileCache()
@@ -62,23 +82,4 @@ getClinical <-
         }
     }
     coldata
-}
-
-#' Obtain the reference table for clinical data
-#'
-#' The column names in the output table can be used in the `getClinical`
-#' function.
-#'
-#' @inheritParams getClinical
-#'
-#' @return A table with reference links to data resources on Terra
-#'
-#' @export
-getClinicalTable <-
-    function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
-{
-    samples <- avtable(tablename)
-    metadata <- samples[, metacols]
-    samples <- samples[, !names(samples) %in% participant_meta]
-    samples[, grep("clin", names(samples))]
 }

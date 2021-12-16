@@ -14,7 +14,7 @@ clinical data (default: "sample")}
 See the `.PARTICIPANT_METADATA_COLS` global variable}
 }
 \value{
-A table with reference links to data resources on Terra
+A tibble with reference links to data resources on Terra
 }
 \description{
 The column names in the output table can be used in the `getClinical`
