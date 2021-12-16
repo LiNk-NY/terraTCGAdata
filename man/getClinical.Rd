@@ -7,7 +7,8 @@
 getClinical(
   tablename = "sample",
   metacols = .PARTICIPANT_METADATA_COLS,
-  columnName = NULL
+  columnName = NULL,
+  participants = TRUE
 )
 }
 \arguments{
@@ -18,7 +19,10 @@ clinical data (default: "sample")}
 See the `.PARTICIPANT_METADATA_COLS` global variable}
 
 \item{columnName}{The name of the column to extract files, see
-`getClinicalFiles` table.}
+`getClinicalTable` table.}
+
+\item{participants}{logical(1) Whether to merge the participant table
+from `avtable("participant")` to the clinical data}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,
