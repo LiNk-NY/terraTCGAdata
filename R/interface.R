@@ -83,3 +83,18 @@ getClinical <-
     }
     coldata
 }
+
+tablecolumn <- function(tablename = "sample", column = "sample_type") {
+    table(avtable(tablename)[[column]])
+}
+
+sampleTypesTable <- function() {
+    table(avtable("sample")[["sample_type"]])
+    dataenv <- new.env(parent = emptyenv())
+    data("sampleTypes", envir = dataenv, package = "TCGAutils")
+    stypes <- dataenv[["sampleTypes"]]
+    sidx <- match(names(stable), stypes[["Short.Letter.Code"]])
+    rest <- cbind(stypes[sidx, ], Frequency = as.numeric(stable))
+    rownames(rest) <- NULL
+    rest
+}
