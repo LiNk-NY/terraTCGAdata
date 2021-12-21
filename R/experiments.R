@@ -31,6 +31,15 @@ getAssayTable <-
 #'
 #' @return An `ExperimentList` of assays selected
 #'
+#' @examples
+#'
+#' getAssayData(
+#'     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+#'     sampleCode = "01",
+#'     tablename = "sample",
+#'     metacols = .PARTICIPANT_METADATA_COLS
+#' )
+#'
 #' @export
 getAssayData <-
     function(assayName, sampleCode = "01", tablename = "sample",
@@ -52,12 +61,27 @@ getAssayData <-
 
     assaycopied <- list.files(rpath, pattern = "\\.txt", full.names = TRUE)
     tcgaids <- gsub(".data.txt", "", basename(assaycopied), fixed = TRUE)
-
+    tcgaids <- tcgaids[
+        TCGAutils::TCGAsampleSelect(tcgaids, sampleCodes = sampleCode)
+    ]
+    assayselect <- file.path(rpath, paste0(tcgaids, ".data.txt"))
     datarows <- lapply(
-        list.files(rpath, pattern = "TCGA.*data.txt", full.names = TRUE),
-        readr::read_tsv
+        assayselect,
+        readr::read_tsv,
+        show_col_types = FALSE
     )
     cnames <- unlist(datarows[[1]][1, ], use.names = FALSE)
     datarows <- lapply(datarows, function(x) x[-1, ])
     rowlist <- lapply(datarows, `[[`, 1L)
+    dataonly <- lapply(datarows, function(x) {
+        suppressMessages(readr::type_convert(x[2L]))
+    })
+    dups <- rowlist[!duplicated(rowlist)]
+    g1 <- vapply(rowlist, function(rl) identical(rl, dups[[1]]), logical(1L))
+    g2 <- vapply(rowlist, function(rl) identical(rl, dups[[2]]), logical(1L))
+    d1 <- cbind(rownames = dups[[1]], dplyr::bind_cols(dataonly[g1]))
+    d2 <- cbind(rownames = dups[[2]], dplyr::bind_cols(dataonly[g2]))
+    df <- merge(d1, d2, by = "rownames")
+    rownames(df) <- df[[1]]
+    data.matrix(df[, -1])
 }
