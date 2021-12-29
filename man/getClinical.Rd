@@ -34,6 +34,5 @@ Obtain clinical data
 \examples{
 
 getClinical()
-getClinical()
 
 }

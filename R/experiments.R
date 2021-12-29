@@ -12,7 +12,7 @@ getAssayTable <-
 {
     samples <- avtable(tablename)
     metadata <- samples[, metacols]
-    samples <- samples[, !names(samples) %in% participant_meta]
+    samples <- samples[, !names(samples) %in% metacols]
     samples[, grep("clin", names(samples), invert = TRUE)]
 }
 
