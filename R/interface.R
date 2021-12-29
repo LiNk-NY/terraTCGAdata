@@ -89,7 +89,7 @@ tablecolumn <- function(tablename = "sample", column = "sample_type") {
 }
 
 sampleTypesTable <- function() {
-    table(avtable("sample")[["sample_type"]])
+    stable <- table(avtable("sample")[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
     data("sampleTypes", envir = dataenv, package = "TCGAutils")
     stypes <- dataenv[["sampleTypes"]]
