@@ -39,6 +39,8 @@ getClinicalTable <-
 #'
 #' @export
 #'
+#' @md
+#'
 #' @examples
 #'
 #' getClinical()
@@ -48,7 +50,6 @@ getClinical <-
         metacols = .PARTICIPANT_METADATA_COLS)
 {
     allclin <- getClinicalTable(tablename = tablename, metacols = metacols)
-    stopifnot(.is_scalar_character(columnName))
     if (missing(columnName))
         columnName <- names(allclin)[1L]
     clinfiles <- unlist(unique(allclin[, columnName]))
