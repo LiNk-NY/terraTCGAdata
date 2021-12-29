@@ -11,7 +11,7 @@ getAssayTable(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
 clinical data (default: "sample")}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
-See the `.PARTICIPANT_METADATA_COLS` global variable}
+See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
 A tibble of pointers to resources within the Terra data model

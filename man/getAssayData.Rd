@@ -5,29 +5,39 @@
 \title{Obtain assay datasets from Terra}
 \usage{
 getAssayData(
-  tablename = "sample",
-  metacols = .PARTICIPANT_METADATA_COLS,
   assayName,
-  sampleCode = "01"
+  sampleCode = "01",
+  tablename = "sample",
+  metacols = .PARTICIPANT_METADATA_COLS
 )
 }
 \arguments{
-\item{tablename}{The terra data model table from which to extract the
-clinical data (default: "sample")}
-
-\item{metacols}{The set of columns that comprise of the metadata columns.
-See the `.PARTICIPANT_METADATA_COLS` global variable}
-
 \item{assayName}{character() The name of the assay dataset column from
 `getAssayTable` to import into the current workspace.}
 
 \item{sampleCode}{character(1) The sample code used to filtering samples
 e.g., "01" for Primary Solid Tumors, see
 `data("sampleTypes", package = "TCGAutils")` for reference}
+
+\item{tablename}{The terra data model table from which to extract the
+clinical data (default: "sample")}
+
+\item{metacols}{The set of columns that comprise of the metadata columns.
+See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
 An `ExperimentList` of assays selected
 }
 \description{
 Obtain assay datasets from Terra
+}
+\examples{
+
+getAssayData(
+    assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+    sampleCode = "01",
+    tablename = "sample",
+    metacols = .PARTICIPANT_METADATA_COLS
+)
+
 }
