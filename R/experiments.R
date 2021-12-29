@@ -16,8 +16,6 @@ getAssayTable <-
     samples[, grep("clin", names(samples), invert = TRUE)]
 }
 
-# assayName <- "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data"
-
 #' Obtain assay datasets from Terra
 #'
 #' @inheritParams getClinical
@@ -35,7 +33,7 @@ getAssayTable <-
 #'
 #' getAssayData(
 #'     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-#'     sampleCode = "01",
+#'     sampleCode = c("01", "10"),
 #'     tablename = "sample",
 #'     metacols = .PARTICIPANT_METADATA_COLS
 #' )
@@ -77,10 +75,16 @@ getAssayData <-
         suppressMessages(readr::type_convert(x[2L]))
     })
     dups <- rowlist[!duplicated(rowlist)]
-    g1 <- vapply(rowlist, function(rl) identical(rl, dups[[1]]), logical(1L))
-    g2 <- vapply(rowlist, function(rl) identical(rl, dups[[2]]), logical(1L))
-    d1 <- cbind(rownames = dups[[1]], dplyr::bind_cols(dataonly[g1]))
-    d2 <- cbind(rownames = dups[[2]], dplyr::bind_cols(dataonly[g2]))
+    logilist <- vector("list", length(dups))
+    bindlist <- vector("list", length(dups))
+    for (i in seq_along(dups)) {
+        logilist[[i]] <-
+            vapply(rowlist, function(rl) identical(rl, dups[[i]]), logical(1L))
+        bindlist[[i]] <-
+            cbind(rownames = dups[[i]],
+                dplyr::bind_cols(dataonly[logilist[[i]]]))
+    }
+    # wip: merge all elements
     df <- merge(d1, d2, by = "rownames")
     rownames(df) <- df[[1]]
     data.matrix(df[, -1])
