@@ -38,6 +38,11 @@ getAssayTable <-
 #'     metacols = .PARTICIPANT_METADATA_COLS
 #' )
 #'
+#' getAssayData(
+#'     assayName = "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg",
+#'     sampleCode = c("01", "10"),
+#' )
+#'
 #' @export
 getAssayData <-
     function(assayName, sampleCode = "01", tablename = "sample",
@@ -50,11 +55,19 @@ getAssayData <-
     assayfiles <- unlist(unique(na.omit(assayTable[, assayName])))
 
     bfc <- BiocFileCache()
-    rpath <- bfcquery(bfc, assayName)[["rpath"]]
+    rpath <- bfcquery(bfc, assayName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
         rpath <- bfcnew(bfc, rname = assayName, rtype = "local")
         dir.create(rpath)
-        gsutil_cp(assayfiles, rpath)
+        if (length(assayfiles) > 800)
+            lapply(
+                split(assayfiles,
+                      cut(seq_along(assayfiles), 3, labels = letters[1:3])),
+                gsutil_cp,
+                destination = rpath
+            )
+        else
+            gsutil_cp(assayfiles, rpath)
     }
 
     assaycopied <- list.files(rpath, pattern = "\\.txt", full.names = TRUE)
