@@ -84,8 +84,9 @@ getAssayData <-
             cbind(rownames = dups[[i]],
                 dplyr::bind_cols(dataonly[logilist[[i]]]))
     }
-    # wip: merge all elements
-    df <- merge(d1, d2, by = "rownames")
-    rownames(df) <- df[[1]]
+    df <- Reduce(function(...) {
+        merge(..., all = TRUE, by = "rownames")
+    }, bindlist)
+    rownames(df) <- df[["rownames"]]
     data.matrix(df[, -1])
 }
