@@ -5,34 +5,35 @@
 \title{Obtain clinical data}
 \usage{
 getClinical(
-  tablename = "sample",
+  columnName,
   participants = TRUE,
-  columnName = NULL,
+  tablename = "sample",
   metacols = .PARTICIPANT_METADATA_COLS
 )
 }
 \arguments{
+\item{columnName}{The name of the column to extract files, see
+\code{getClinicalTable} table.}
+
+\item{participants}{logical(1) Whether to merge the participant table
+from \code{avtable("participant")} to the clinical data}
+
 \item{tablename}{The terra data model table from which to extract the
 clinical data (default: "sample")}
 
-\item{participants}{logical(1) Whether to merge the participant table
-from `avtable("participant")` to the clinical data}
-
-\item{columnName}{The name of the column to extract files, see
-`getClinicalTable` table.}
-
 \item{metacols}{The set of columns that comprise of the metadata columns.
-See the `.PARTICIPANT_METADATA_COLS` global variable}
+See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,
-    `gs://firecloud...`
+\verb{gs://firecloud...}
 }
 \description{
 Obtain clinical data
 }
 \examples{
 
+getClinical()
 getClinical()
 
 }

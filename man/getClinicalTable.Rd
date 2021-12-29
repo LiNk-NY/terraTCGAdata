@@ -11,7 +11,7 @@ getClinicalTable(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
 clinical data (default: "sample")}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
-See the `.PARTICIPANT_METADATA_COLS` global variable}
+See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
 A tibble with reference links to data resources on Terra
