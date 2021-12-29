@@ -54,7 +54,7 @@ getClinical <-
         columnName <- names(allclin)[1L]
     clinfiles <- unlist(unique(allclin[, columnName]))
     bfc <- BiocFileCache()
-    rpath <- bfcquery(bfc, columnName)[["rpath"]]
+    rpath <- bfcquery(bfc, columnName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
         rpath <- bfcnew(bfc, rname = columnName, rtype = "local")
         dir.create(rpath)
