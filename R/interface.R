@@ -73,12 +73,17 @@ getClinical <-
     clinical <- readr::type_convert(clinical)
     coldata <- as(clinical, "DataFrame")
     if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
-        rownames(coldata) <- toupper(coldata[["patient.bcr_patient_barcode"]])
+        rownames(coldata) <- coldata[["participant_id"]] <-
+            toupper(coldata[["patient.bcr_patient_barcode"]])
         if (participants) {
             parts <- avtable("participant")
+            parts <- as(parts, "DataFrame")
+            rownames(parts) <- parts[["participant_id"]]
+            ## replace munged COAD with TCGA
+            parts[["participant_id"]] <-
+                gsub("^[A-Z]{4}", "TCGA", parts[["participant_id"]])
             coldata <- merge(
-                parts, coldata, by.x = "participant_id",
-                by.y = "patient.bcr_patient_barcode"
+                parts, coldata, by = "participant_id",
             )
         }
     }
