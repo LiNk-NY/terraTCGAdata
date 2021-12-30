@@ -26,7 +26,7 @@ clinical data (default: "sample")}
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
-An `ExperimentList` of assays selected
+Either a matrix or RaggedExperiment depending on the assay selected
 }
 \description{
 Obtain assay datasets from Terra
