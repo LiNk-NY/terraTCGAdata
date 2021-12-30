@@ -85,6 +85,7 @@ getClinical <-
             coldata <- merge(
                 parts, coldata, by = "participant_id",
             )
+            rownames(coldata) <- coldata[["participant_id"]]
         }
     }
     coldata
