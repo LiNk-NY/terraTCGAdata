@@ -11,12 +11,13 @@ Description: Leverage the existing open access TCGA data on Terra with
     data model without learning its complexities. With a few functions,
     you can copy / download and generate a MultiAssayExperiment from the
     TCGA example workspaces provided by Terra.
-Depends: AnVIL
+Depends: AnVIL, MultiAssayExperiment
 Imports: 
   BiocFileCache,
   dplyr,
   readr,
-  S4Vectors
+  S4Vectors,
+  stats
 License: Artistic-2.0
 Encoding: UTF-8
 RoxygenNote: 7.1.2
