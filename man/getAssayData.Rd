@@ -45,4 +45,8 @@ getAssayData(
     sampleCode = c("01", "10"),
 )
 
+getAssayData(
+    assayName = "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"
+)
+
 }

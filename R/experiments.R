@@ -43,6 +43,10 @@ getAssayTable <-
 #'     sampleCode = c("01", "10"),
 #' )
 #'
+#' getAssayData(
+#'     assayName = "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"
+#' )
+#'
 #' @export
 getAssayData <-
     function(assayName, sampleCode = "01", tablename = "sample",
@@ -74,7 +78,7 @@ getAssayData <-
     suffix <-
         if (grepl("^cna|snp", assayName)) { ".seg.txt" } else { ".data.txt" }
     tcgaids <- gsub(suffix, "", basename(assaycopied), fixed = TRUE)
-    if (!missing(sampleCode) && .is_character(sampleCode))
+    if (!missing(sampleCode) && .is_character(sampleCode) && !is.null(sampleCode))
         tcgaids <- tcgaids[
             TCGAutils::TCGAsampleSelect(tcgaids, sampleCodes = sampleCode)
         ]
