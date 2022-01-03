@@ -4,6 +4,8 @@
 #'
 #' @inheritParams getAssayData
 #'
+#' @md
+#'
 #' @return A tibble of pointers to resources within the Terra data model
 #'
 #' @export
@@ -28,6 +30,10 @@ getAssayTable <-
 #'     `data("sampleTypes", package = "TCGAutils")` for reference
 #'
 #' @return Either a matrix or RaggedExperiment depending on the assay selected
+#'
+#' @seealso [getAssayTable()]
+#'
+#' @md
 #'
 #' @examples
 #'
@@ -127,6 +133,8 @@ getAssayData <-
 #'     of `getAssayTable`.
 #'
 #' @return An `ExperimentList` of assays
+#'
+#' @md
 #'
 #' @examples
 #'
