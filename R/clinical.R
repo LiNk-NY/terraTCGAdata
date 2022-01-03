@@ -95,6 +95,22 @@ tablecolumn <- function(tablename = "sample", column = "sample_type") {
     table(avtable(tablename)[[column]])
 }
 
+#' Get an overview of the samples available in the workspace
+#'
+#' The function provides an overview of samples from the `avtables("sample")`
+#' table for the current workspace. Along with the sample codes and frequencies,
+#' the output provides a description for each code and the short letter codes.
+#'
+#' @return A `data.frame` of sample codes and frequency along with their
+#'     definition and short letter code
+#'
+#' @md
+#'
+#' @examples
+#'
+#' sampleTypesTable()
+#'
+#' @export
 sampleTypesTable <- function() {
     stable <- table(avtable("sample")[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
