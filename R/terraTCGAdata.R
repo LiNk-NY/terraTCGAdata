@@ -40,8 +40,7 @@ getAssayTable <-
 #' getAssayData(
 #'     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
 #'     sampleCode = c("01", "10"),
-#'     tablename = "sample",
-#'     metacols = .PARTICIPANT_METADATA_COLS
+#'     tablename = "sample"
 #' )
 #'
 #' getAssayData(
