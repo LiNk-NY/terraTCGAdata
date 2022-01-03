@@ -14,7 +14,8 @@ clinical data (default: "sample")}
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
-A tibble with reference links to data resources on Terra
+A tibble of Google Storage resource locations e.g.,
+    `gs://firecloud...`
 }
 \description{
 The column names in the output table can be used in the `getClinical`

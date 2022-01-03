@@ -13,7 +13,8 @@ getClinical(
 }
 \arguments{
 \item{columnName}{The name of the column to extract files, see
-\code{getClinicalTable} table.}
+\code{getClinicalTable} table. If not provided, the first column in the table
+will be used to obtain the clinical information.}
 
 \item{participants}{logical(1) Whether to merge the participant table
 from \code{avtable("participant")} to the clinical data}
@@ -25,11 +26,12 @@ clinical data (default: "sample")}
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
-A tibble of Google Storage resource locations e.g.,
-\verb{gs://firecloud...}
+A \code{DataFrame} with clinical information from TCGA. The metadata i.e.,
+\code{metadata(object)} includes the \code{columnName} used to obtain the data.
 }
 \description{
-Obtain clinical data
+The participant table may contain curated demographic information e.g.,
+sex, age, etc.
 }
 \examples{
 

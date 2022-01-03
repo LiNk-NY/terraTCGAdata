@@ -8,7 +8,8 @@
 #'
 #' @inheritParams getClinical
 #'
-#' @return A tibble with reference links to data resources on Terra
+#' @return A tibble of Google Storage resource locations e.g.,
+#'     `gs://firecloud...`
 #'
 #' @export
 getClinicalTable <-
@@ -22,6 +23,9 @@ getClinicalTable <-
 
 #' Obtain clinical data
 #'
+#' The participant table may contain curated demographic information e.g.,
+#' sex, age, etc.
+#'
 #' @param tablename The terra data model table from which to extract the
 #'     clinical data (default: "sample")
 #'
@@ -29,13 +33,14 @@ getClinicalTable <-
 #'     from `avtable("participant")` to the clinical data
 #'
 #' @param columnName The name of the column to extract files, see
-#'     `getClinicalTable` table.
+#'     `getClinicalTable` table. If not provided, the first column in the table
+#'     will be used to obtain the clinical information.
 #'
 #' @param metacols The set of columns that comprise of the metadata columns.
 #'     See the `.PARTICIPANT_METADATA_COLS` global variable
 #'
-#' @return A tibble of Google Storage resource locations e.g.,
-#'     `gs://firecloud...`
+#' @return A `DataFrame` with clinical information from TCGA. The metadata i.e.,
+#'     `metadata(object)` includes the `columnName` used to obtain the data.
 #'
 #' @export
 #'
@@ -71,7 +76,7 @@ getClinical <-
     )
     clinical <- dplyr::bind_rows(allclins)
     clinical <- readr::type_convert(clinical)
-    coldata <- as(clinical, "DataFrame")
+    coldata <- as.data.frame(clinical)
     if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
         rownames(coldata) <- coldata[["participant_id"]] <-
             toupper(coldata[["patient.bcr_patient_barcode"]])
@@ -87,12 +92,10 @@ getClinical <-
             )
             rownames(coldata) <- coldata[["participant_id"]]
         }
+        coldata <- as(clinical, "DataFrame")
     }
+    metadata(coldata)[["columnName"]] <- columnName
     coldata
-}
-
-tablecolumn <- function(tablename = "sample", column = "sample_type") {
-    table(avtable(tablename)[[column]])
 }
 
 #' Get an overview of the samples available in the workspace
