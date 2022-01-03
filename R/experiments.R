@@ -154,10 +154,11 @@ ExperimentListData <- function(assayNames, sampleCode) {
 #'      `getAssayTable()`
 #'
 #' @param sampleCode character() A character vector of sample codes from
-#'     `sampleTypesTable()`
+#'     `sampleTypesTable()`. By default, (NULL) all samples are downloaded and
+#'     kept in the data.
 #'
 #' @param split logical(1L) Whether or not to split the `MultiAssayExperiment`
-#'     by sample types using `splitAssays` helper function.
+#'     by sample types using `splitAssays` helper function (default FALSE).
 #'
 #' @return A `MultiAssayExperiment` object with n number of assays corresponding
 #'     to the `assays` argument.
@@ -174,7 +175,7 @@ ExperimentListData <- function(assayNames, sampleCode) {
 #' )
 #'
 #' @export
-terraTCGAdata <- function(assays, sampleCode = NULL, split = TRUE) {
+terraTCGAdata <- function(assays, sampleCode = NULL, split = FALSE) {
     el <- ExperimentListData(assayNames = assays, sampleCode = sampleCode)
     coldata <- getClinical()
     samap <- TCGAutils::generateMap(el, coldata, TCGAutils::TCGAbarcode)

@@ -4,17 +4,18 @@
 \alias{terraTCGAdata}
 \title{Obtain a MultiAssayExperiment from the Terra workspace}
 \usage{
-terraTCGAdata(assays, sampleCode = NULL, split = TRUE)
+terraTCGAdata(assays, sampleCode = NULL, split = FALSE)
 }
 \arguments{
 \item{assays}{character() A character vector of assay names taken from
 \code{getAssayTable()}}
 
 \item{sampleCode}{character() A character vector of sample codes from
-\code{sampleTypesTable()}}
+\code{sampleTypesTable()}. By default, (NULL) all samples are downloaded and
+kept in the data.}
 
 \item{split}{logical(1L) Whether or not to split the \code{MultiAssayExperiment}
-by sample types using \code{splitAssays} helper function.}
+by sample types using \code{splitAssays} helper function (default FALSE).}
 }
 \value{
 A \code{MultiAssayExperiment} object with n number of assays corresponding
