@@ -23,6 +23,6 @@
         samples, GenomicRanges::makeGRangesFromDataFrame,
         keep.extra.columns = TRUE
     )
-    grls <- as(listgranges, "GRangesList")
+    grls <- methods::as(listgranges, "GRangesList")
     RaggedExperiment::RaggedExperiment(grls)
 }

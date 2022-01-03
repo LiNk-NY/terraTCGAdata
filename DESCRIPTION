@@ -15,9 +15,15 @@ Depends: AnVIL, MultiAssayExperiment
 Imports: 
   BiocFileCache,
   dplyr,
+  GenomicRanges,
+  methods,
+  RaggedExperiment,
   readr,
   S4Vectors,
-  stats
+  stats,
+  tidyr,
+  TCGAutils,
+  utils
 License: Artistic-2.0
 Encoding: UTF-8
 RoxygenNote: 7.1.2

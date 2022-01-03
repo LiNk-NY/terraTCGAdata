@@ -1,3 +1,6 @@
+#' @import MultiAssayExperiment AnVIL
+NULL
+
 .PARTICIPANT_METADATA_COLS <-
     c("sample_id", "sample_type", "participant", "tcga_sample_id")
 
@@ -60,10 +63,10 @@ getClinical <-
     if (missing(columnName))
         columnName <- names(allclin)[1L]
     clinfiles <- unlist(unique(allclin[, columnName]))
-    bfc <- BiocFileCache()
-    rpath <- bfcquery(bfc, columnName, exact = TRUE)[["rpath"]]
+    bfc <- BiocFileCache::BiocFileCache()
+    rpath <- BiocFileCache::bfcquery(bfc, columnName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
-        rpath <- bfcnew(bfc, rname = columnName, rtype = "local")
+        rpath <- BiocFileCache::bfcnew(bfc, rname = columnName, rtype = "local")
         dir.create(rpath)
         gsutil_cp(clinfiles, rpath)
     }
@@ -84,7 +87,7 @@ getClinical <-
             toupper(coldata[["patient.bcr_patient_barcode"]])
         if (participants) {
             parts <- avtable("participant")
-            parts <- as(parts, "DataFrame")
+            parts <- methods::as(parts, "DataFrame")
             rownames(parts) <- parts[["participant_id"]]
             ## replace munged COAD with TCGA
             parts[["participant_id"]] <-
@@ -94,9 +97,9 @@ getClinical <-
             )
             rownames(coldata) <- coldata[["participant_id"]]
         }
-        coldata <- as(clinical, "DataFrame")
+        coldata <- methods::as(clinical, "DataFrame")
     }
-    metadata(coldata)[["columnName"]] <- columnName
+    S4Vectors::metadata(coldata)[["columnName"]] <- columnName
     coldata
 }
 
@@ -119,7 +122,7 @@ getClinical <-
 sampleTypesTable <- function() {
     stable <- table(avtable("sample")[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
-    data("sampleTypes", envir = dataenv, package = "TCGAutils")
+    utils::data("sampleTypes", envir = dataenv, package = "TCGAutils")
     stypes <- dataenv[["sampleTypes"]]
     sidx <- match(names(stable), stypes[["Short.Letter.Code"]])
     rest <- cbind(stypes[sidx, ], Frequency = as.numeric(stable))

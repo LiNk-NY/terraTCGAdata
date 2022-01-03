@@ -62,12 +62,12 @@ getAssayData <-
         stop("Select an assay name from 'getAssayTable'")
 
     assayTable <- getAssayTable(tablename = tablename, metacols = metacols)
-    assayfiles <- unlist(unique(na.omit(assayTable[, assayName])))
+    assayfiles <- unlist(unique(stats::na.omit(assayTable[, assayName])))
 
-    bfc <- BiocFileCache()
-    rpath <- bfcquery(bfc, assayName, exact = TRUE)[["rpath"]]
+    bfc <- BiocFileCache::BiocFileCache()
+    rpath <- BiocFileCache::bfcquery(bfc, assayName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
-        rpath <- bfcnew(bfc, rname = assayName, rtype = "local")
+        rpath <- BiocFileCache::bfcnew(bfc, rname = assayName, rtype = "local")
         dir.create(rpath)
         if (length(assayfiles) > 800)
             lapply(
@@ -191,7 +191,9 @@ terraTCGAdata <- function(assays, sampleCode = NULL, split = FALSE) {
         experiments = el, colData = coldata, sampleMap = samap
     )
     if (split && (length(sampleCode) || !is.null(sampleCode))) {
-        TCGAsplitAssays(mae, sampleCodes = sampleCode, exclusive = TRUE)
+        TCGAutils::TCGAsplitAssays(
+            mae, sampleCodes = sampleCode, exclusive = TRUE
+        )
     } else {
         mae
     }
