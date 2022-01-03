@@ -15,9 +15,9 @@ See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,
-    `gs://firecloud...`
+\verb{gs://firecloud...}
 }
 \description{
-The column names in the output table can be used in the `getClinical`
+The column names in the output table can be used in the \code{getClinical}
 function.
 }

@@ -8,6 +8,8 @@
 #'
 #' @inheritParams getClinical
 #'
+#' @md
+#'
 #' @return A tibble of Google Storage resource locations e.g.,
 #'     `gs://firecloud...`
 #'

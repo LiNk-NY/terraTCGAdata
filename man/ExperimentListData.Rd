@@ -8,14 +8,14 @@ ExperimentListData(assayNames, sampleCode)
 }
 \arguments{
 \item{assayNames}{character() A vector of assays selected from the colnames
-of `getAssayTable`.}
+of \code{getAssayTable}.}
 
 \item{sampleCode}{character(1) The sample code used to filtering samples
 e.g., "01" for Primary Solid Tumors, see
-`data("sampleTypes", package = "TCGAutils")` for reference}
+\code{data("sampleTypes", package = "TCGAutils")} for reference}
 }
 \value{
-An `ExperimentList` of assays
+An \code{ExperimentList} of assays
 }
 \description{
 Import Terra TCGA data as an ExperimentList

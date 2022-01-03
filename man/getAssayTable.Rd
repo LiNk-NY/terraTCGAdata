@@ -17,5 +17,5 @@ See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 A tibble of pointers to resources within the Terra data model
 }
 \description{
-The column names in the output can be used in the `getAssayData` function.
+The column names in the output can be used in the \code{getAssayData} function.
 }
