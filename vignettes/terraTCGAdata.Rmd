@@ -1,0 +1,78 @@
+---
+title: "terraTCGAdata Introduction"
+author: "Marcel Ramos"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Obtain Terra TCGA data as MultiAssayExperiment}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
+---
+
+# GitHub Installation
+
+```{r, eval = FALSE}
+if (!require("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("LiNk-NY/terraTCGAdata")
+```
+
+# Description
+
+Terra workspaces come pre-packaged with TCGA data. The challenge is to make
+use of the Terra data model and represent the data as `MultiAssayExperiment`.
+
+# Clinical data resources
+
+```{r}
+ct <- getClinicalTable()
+ct
+names(ct)
+```
+
+# Clinical data download
+
+```{r}
+column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
+clin <- getClinical(column_name, participants = TRUE)
+clin[, 1:6]
+dim(clin)
+```
+
+# Assay data resources
+
+```{r}
+at <- getAssayTable()
+at
+names(at)
+```
+
+# Intermediate function for obtaining only the data
+
+```{r}
+sampleTypesTable()
+prot <- getAssayData(
+    assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+    sampleCode = c("01", "10"),
+    tablename = "sample"
+)
+prot[, 1:5]
+```
+
+# MultiAssayExperiment
+
+```{r}
+mae <- terraTCGAdata(
+    clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
+    assays =
+      c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+      "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
+    sampleCode = NULL,
+    split = FALSE
+)
+mae
+```
+
