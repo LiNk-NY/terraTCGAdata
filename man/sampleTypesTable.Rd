@@ -7,7 +7,7 @@
 sampleTypesTable()
 }
 \value{
-A \code{data.frame} of sample codes and frequency along with their
+A \code{tibble} of sample codes and frequency along with their
 definition and short letter code
 }
 \description{

@@ -4,11 +4,23 @@
 \alias{terraTCGAdata}
 \title{Obtain a MultiAssayExperiment from the Terra workspace}
 \usage{
-terraTCGAdata(assays, sampleCode = NULL, split = FALSE)
+terraTCGAdata(
+  clinicalName,
+  assays,
+  participants = TRUE,
+  sampleCode = NULL,
+  split = FALSE
+)
 }
 \arguments{
+\item{clinicalName}{character(1) The column name taken from
+\code{getClinicalTable()} and downloaded to be included as the \code{colData}.}
+
 \item{assays}{character() A character vector of assay names taken from
 \code{getAssayTable()}}
+
+\item{participants}{logical(1) Whether to merge the participant table
+from \code{avtable("participant")} to the clinical data}
 
 \item{sampleCode}{character() A character vector of sample codes from
 \code{sampleTypesTable()}. By default, (NULL) all samples are downloaded and
@@ -29,6 +41,7 @@ can be found on \url{app.terra.bio}.
 \examples{
 
 terraTCGAdata(
+    clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
     assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
     sampleCode = NULL,

@@ -80,27 +80,7 @@ getClinical <-
         tidyr::pivot_wider, names_from = "node_name", values_from = "node_value"
     )
     clinical <- dplyr::bind_rows(allclins)
-    clinical <- readr::type_convert(clinical)
-    coldata <- as.data.frame(clinical)
-    if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
-        rownames(coldata) <- coldata[["participant_id"]] <-
-            toupper(coldata[["patient.bcr_patient_barcode"]])
-        if (participants) {
-            parts <- avtable("participant")
-            parts <- methods::as(parts, "DataFrame")
-            rownames(parts) <- parts[["participant_id"]]
-            ## replace munged COAD with TCGA
-            parts[["participant_id"]] <-
-                gsub("^[A-Z]{4}", "TCGA", parts[["participant_id"]])
-            coldata <- merge(
-                parts, coldata, by = "participant_id",
-            )
-            rownames(coldata) <- coldata[["participant_id"]]
-        }
-        coldata <- methods::as(clinical, "DataFrame")
-    }
-    S4Vectors::metadata(coldata)[["columnName"]] <- columnName
-    coldata
+    readr::type_convert(clinical)
 }
 
 #' Get an overview of the samples available in the workspace
@@ -109,7 +89,7 @@ getClinical <-
 #' table for the current workspace. Along with the sample codes and frequencies,
 #' the output provides a description for each code and the short letter codes.
 #'
-#' @return A `data.frame` of sample codes and frequency along with their
+#' @return A `tibble` of sample codes and frequency along with their
 #'     definition and short letter code
 #'
 #' @md
@@ -127,5 +107,5 @@ sampleTypesTable <- function() {
     sidx <- match(names(stable), stypes[["Short.Letter.Code"]])
     rest <- cbind(stypes[sidx, ], Frequency = as.numeric(stable))
     rownames(rest) <- NULL
-    rest
+    dplyr::as_tibble(rest)
 }

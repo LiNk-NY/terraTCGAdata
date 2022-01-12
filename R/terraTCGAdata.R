@@ -157,8 +157,13 @@ ExperimentListData <- function(assayNames, sampleCode) {
 #' documentation correspond to the TCGA_COAD_OpenAccess_V1 workspace that
 #' can be found on \url{app.terra.bio}.
 #'
+#' @inheritParams getClinical
+#'
+#' @param clinicalName character(1) The column name taken from
+#'     `getClinicalTable()` and downloaded to be included as the `colData`.
+#'
 #' @param assays character() A character vector of assay names taken from
-#'      `getAssayTable()`
+#'     `getAssayTable()`
 #'
 #' @param sampleCode character() A character vector of sample codes from
 #'     `sampleTypesTable()`. By default, (NULL) all samples are downloaded and
@@ -175,6 +180,7 @@ ExperimentListData <- function(assayNames, sampleCode) {
 #' @examples
 #'
 #' terraTCGAdata(
+#'     clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
 #'     assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
 #'     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
 #'     sampleCode = NULL,
@@ -182,9 +188,19 @@ ExperimentListData <- function(assayNames, sampleCode) {
 #' )
 #'
 #' @export
-terraTCGAdata <- function(assays, sampleCode = NULL, split = FALSE) {
+terraTCGAdata <-
+    function(
+        clinicalName, assays, participants = TRUE,
+        sampleCode = NULL, split = FALSE
+    )
+{
     el <- ExperimentListData(assayNames = assays, sampleCode = sampleCode)
-    coldata <- getClinical()
+    coldata <- getClinical(columnName = clinicalName)
+    coldata <- .transform_clinical_to_coldata(
+        clinical_data = coldata,
+        columnName = clinicalName,
+        participants = participants
+    )
     samap <- TCGAutils::generateMap(el, coldata, TCGAutils::TCGAbarcode)
     mae <- MultiAssayExperiment(
         experiments = el, colData = coldata, sampleMap = samap
@@ -196,4 +212,27 @@ terraTCGAdata <- function(assays, sampleCode = NULL, split = FALSE) {
     } else {
         mae
     }
+}
+
+.transform_clinical_to_coldata <- function(clinical_data, columnName, participants) {
+    coldata <- as.data.frame(clinical_data)
+    if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
+        rownames(coldata) <- coldata[["participant_id"]] <-
+            toupper(coldata[["patient.bcr_patient_barcode"]])
+        if (participants) {
+            parts <- avtable("participant")
+            parts <- methods::as(parts, "DataFrame")
+            rownames(parts) <- parts[["participant_id"]]
+            ## replace munged COAD with TCGA
+            parts[["participant_id"]] <-
+                gsub("^[A-Z]{4}", "TCGA", parts[["participant_id"]])
+            coldata <- merge(
+                parts, coldata, by = "participant_id",
+            )
+            rownames(coldata) <- coldata[["participant_id"]]
+        }
+        coldata <- methods::as(coldata, "DataFrame")
+    }
+    S4Vectors::metadata(coldata)[["columnName"]] <- columnName
+    coldata
 }
