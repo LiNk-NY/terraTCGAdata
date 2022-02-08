@@ -5,12 +5,12 @@
 \alias{findTCGAworkspaces}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
-terraWorkspace(projectCode = NULL)
+terraWorkspace(projectName = NULL)
 
-findTCGAworkspaces(project = "TCGA", cancerCode = ".*")
+findTCGAworkspaces(project = "^TCGA", cancerCode = ".*")
 }
 \arguments{
-\item{projectCode}{character(1) A project code usually in the form of
+\item{projectName}{character(1) A project code usually in the form of
 \verb{TCGA_CODE_OpenAccess_V1-0_DATA}. See \code{findTCGAworkspaces} for a list of
 project codes.}
 }
@@ -19,7 +19,7 @@ A Terra TCGA Workspace name
 }
 \description{
 Terra allows access to about 71 open access TCGA datasets. A dataset
-workspace can be set using the \code{terraWorkspace} function with a \code{projectCode}
+workspace can be set using the \code{terraWorkspace} function with a \code{projectName}
 input. Use the \code{findTCGAworkspaces} function to list all of the available
 open access TCGA data workspaces.
 }
