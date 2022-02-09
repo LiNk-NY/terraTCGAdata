@@ -48,6 +48,6 @@ sex, age, etc.
 }
 \examples{
 
-getClinical()
+getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
 
 }

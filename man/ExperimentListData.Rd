@@ -42,7 +42,8 @@ Import Terra TCGA data as an ExperimentList
 ExperimentListData(
     assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
-    sampleCode = c("01", "10")
+    sampleCode = c("01", "10"),
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
 )
 
 }

@@ -36,6 +36,6 @@ the output provides a description for each code and the short letter codes.
 }
 \examples{
 
-sampleTypesTable()
+sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 
 }

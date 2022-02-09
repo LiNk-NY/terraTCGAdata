@@ -73,7 +73,7 @@ getClinicalTable <-
 #'
 #' @examples
 #'
-#' getClinical()
+#' getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
 #'
 getClinical <-
     function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
@@ -123,7 +123,7 @@ getClinical <-
 #'
 #' @examples
 #'
-#' sampleTypesTable()
+#' sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 #'
 #' @export
 sampleTypesTable <-

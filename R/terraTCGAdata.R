@@ -10,6 +10,10 @@
 #'
 #' @return A tibble of pointers to resources within the Terra data model
 #'
+#' @examples
+#'
+#' getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
+#'
 #' @export
 getAssayTable <-
     function(
@@ -202,6 +206,7 @@ ExperimentListData <-
 #'     clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
 #'     assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
 #'     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
+#'     workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
 #'     sampleCode = NULL,
 #'     split = FALSE
 #' )
