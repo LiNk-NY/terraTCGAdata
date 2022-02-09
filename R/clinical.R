@@ -26,7 +26,7 @@ getClinicalTable <-
 {
     if (verbose)
         message(
-            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
     samples <- avtable(
         tablename, namespace = namespace, name = workspace
@@ -136,7 +136,7 @@ sampleTypesTable <-
 {
     if (verbose)
         message(
-            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
     avtab <- avtable(tablename, namespace = namespace, name = workspace)
     stable <- table(avtab[["sample_type"]])
