@@ -25,10 +25,28 @@ BiocManager::install("LiNk-NY/terraTCGAdata")
 Terra workspaces come pre-packaged with TCGA data. The challenge is to make
 use of the Terra data model and represent the data as `MultiAssayExperiment`.
 
+# Default Data Workspace
+
+To get a list of available TCGA workspaces, use the `findTCGAworkspaces()`
+function: 
+
+```{r}
+findTCGAworkspaces()
+```
+
+You can then set a package-wide option with the `terraTCGAworkspace` function
+and check the setting with the ``.
+
+```{r,eval=FALSE}
+terraTCGAworkspace()
+getOption("terraTCGAdata.workspace")
+```
+
+
 # Clinical data resources
 
 ```{r}
-ct <- getClinicalTable()
+ct <- getClinicalTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 ct
 names(ct)
 ```
@@ -37,7 +55,11 @@ names(ct)
 
 ```{r}
 column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
-clin <- getClinical(column_name, participants = TRUE)
+clin <- getClinical(
+    columnName = column_name,
+    participants = TRUE,
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
+)
 clin[, 1:6]
 dim(clin)
 ```
@@ -45,7 +67,7 @@ dim(clin)
 # Assay data resources
 
 ```{r}
-at <- getAssayTable()
+at <- getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 at
 names(at)
 ```
@@ -53,11 +75,11 @@ names(at)
 # Intermediate function for obtaining only the data
 
 ```{r}
-sampleTypesTable()
+sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 prot <- getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     sampleCode = c("01", "10"),
-    tablename = "sample"
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
 )
 prot[, 1:5]
 ```
@@ -71,7 +93,8 @@ mae <- terraTCGAdata(
       c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
       "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
     sampleCode = NULL,
-    split = FALSE
+    split = FALSE,
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
 )
 mae
 ```

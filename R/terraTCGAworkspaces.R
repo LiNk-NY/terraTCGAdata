@@ -3,7 +3,7 @@
 #' Obtain or set the Terra Workspace Project Dataset
 #'
 #' Terra allows access to about 71 open access TCGA datasets. A dataset
-#' workspace can be set using the `terraWorkspace` function with a `projectName`
+#' workspace can be set using the `terraTCGAworkspace` function with a `projectName`
 #' input. Use the `findTCGAworkspaces` function to list all of the available
 #' open access TCGA data workspaces.
 #'
@@ -22,14 +22,14 @@
 #' findTCGAworkspaces()
 #'
 #' @export
-terraWorkspace <- function(projectName = NULL) {
+terraTCGAworkspace <- function(projectName = NULL) {
     getOption(
         "terraTCGAdata.workspace",
         setTerraWorkspace(projectName = projectName)
     )
 }
 
-#' @describeIn terraWorkspace Function to enumerate the available TCGA data
+#' @describeIn terraTCGAworkspace Function to enumerate the available TCGA data
 #'     workspaces in Terra
 #'
 #' @export
