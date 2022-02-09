@@ -1,3 +1,5 @@
+.DEFAULT_TABLENAME <- "sample"
+
 #' Obtain a reference table for assay data in the Terra data model
 #'
 #' The column names in the output can be used in the `getAssayData` function.
@@ -10,9 +12,14 @@
 #'
 #' @export
 getAssayTable <-
-    function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+    function(
+        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
+        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE
+    )
 {
-    samples <- avtable(tablename)
+    samples <- avtable(
+        table = tablename, namespace = namespace, name = workspace
+    )
     metadata <- samples[, metacols]
     samples <- samples[, !names(samples) %in% metacols]
     samples[, grep("clin", names(samples), invert = TRUE)]
@@ -39,13 +46,12 @@ getAssayTable <-
 #'
 #' getAssayData(
 #'     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-#'     sampleCode = c("01", "10"),
-#'     tablename = "sample"
+#'     sampleCode = c("01", "10")
 #' )
 #'
 #' getAssayData(
 #'     assayName = "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg",
-#'     sampleCode = c("01", "10"),
+#'     sampleCode = c("01", "10")
 #' )
 #'
 #' getAssayData(
@@ -54,13 +60,18 @@ getAssayTable <-
 #'
 #' @export
 getAssayData <-
-    function(assayName, sampleCode = "01", tablename = "sample",
-        metacols = .PARTICIPANT_METADATA_COLS)
+    function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAME,
+        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        metacols = .PARTICIPANT_METADATA_COLS
+    )
 {
     if (missing(assayName))
         stop("Select an assay name from 'getAssayTable'")
 
-    assayTable <- getAssayTable(tablename = tablename, metacols = metacols)
+    assayTable <- getAssayTable(
+        tablename = tablename, metacols = metacols,
+        workspace = workspace, namespace = namespace
+    )
     assayfiles <- unlist(unique(stats::na.omit(assayTable[, assayName])))
 
     bfc <- BiocFileCache::BiocFileCache()
@@ -144,11 +155,26 @@ getAssayData <-
 #' )
 #'
 #' @export
-ExperimentListData <- function(assayNames, sampleCode) {
-    exps <- lapply(
-        stats::setNames(nm = assayNames), getAssayData, sampleCode = sampleCode
+ExperimentListData <-
+    function(
+        assayNames, sampleCode, workspace = terraWorkspace(),
+        namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAME,
+        verbose = TRUE
     )
-    ExperimentList(exps)
+{
+    if (verbose)
+        message(
+            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+        )
+    elist <- structure(vector("list", length(assayNames)), .Names = assayNames)
+    for (assay in assayNames) {
+        elist[[assay]] <-
+            getAssayData(
+                assay, sampleCode = sampleCode, tablename = tablename,
+                workspace = workspace, namespace = namespace
+            )
+    }
+    ExperimentList(elist)
 }
 
 #' Obtain a MultiAssayExperiment from the Terra workspace
@@ -191,11 +217,23 @@ ExperimentListData <- function(assayNames, sampleCode) {
 terraTCGAdata <-
     function(
         clinicalName, assays, participants = TRUE,
-        sampleCode = NULL, split = FALSE
+        sampleCode = NULL, split = FALSE,
+        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        tablename = .DEFAULT_TABLENAME, verbose = TRUE
     )
 {
-    el <- ExperimentListData(assayNames = assays, sampleCode = sampleCode)
-    coldata <- getClinical(columnName = clinicalName)
+    if (verbose)
+        message(
+            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+        )
+    el <- ExperimentListData(
+        assayNames = assays, sampleCode = sampleCode, workspace = workspace,
+        namespace = namespace, tablename = tablename, verbose = FALSE
+    )
+    coldata <- getClinical(
+        columnName = clinicalName, workspace = workspace,
+        namespace = namespace, verbose = FALSE
+    )
     coldata <- .transform_clinical_to_coldata(
         clinical_data = coldata,
         columnName = clinicalName,
@@ -214,7 +252,9 @@ terraTCGAdata <-
     }
 }
 
-.transform_clinical_to_coldata <- function(clinical_data, columnName, participants) {
+.transform_clinical_to_coldata <-
+    function(clinical_data, columnName, participants)
+{
     coldata <- as.data.frame(clinical_data)
     if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
         rownames(coldata) <- coldata[["participant_id"]] <-

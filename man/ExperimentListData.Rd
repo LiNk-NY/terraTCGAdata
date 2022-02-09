@@ -4,7 +4,14 @@
 \alias{ExperimentListData}
 \title{Import Terra TCGA data as an ExperimentList}
 \usage{
-ExperimentListData(assayNames, sampleCode)
+ExperimentListData(
+  assayNames,
+  sampleCode,
+  workspace = terraWorkspace(),
+  namespace = .DEFAULT_NAMESPACE,
+  tablename = .DEFAULT_TABLENAME,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{assayNames}{character() A vector of assays selected from the colnames
@@ -13,6 +20,16 @@ of \code{getAssayTable}.}
 \item{sampleCode}{character(1) The sample code used to filtering samples
 e.g., "01" for Primary Solid Tumors, see
 \code{data("sampleTypes", package = "TCGAutils")} for reference}
+
+\item{workspace}{character(1) The Terra Data Resources workspace from which
+to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+package-wide option.}
+
+\item{namespace}{character(1) The Terra Workspace Namespace that
+defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
+
+\item{tablename}{The Terra data model table from which to extract the
+clinical data (default: "sample")}
 }
 \value{
 An \code{ExperimentList} of assays

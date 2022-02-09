@@ -7,7 +7,9 @@
 getAssayData(
   assayName,
   sampleCode = "01",
-  tablename = "sample",
+  tablename = .DEFAULT_TABLENAME,
+  workspace = terraWorkspace(),
+  namespace = .DEFAULT_NAMESPACE,
   metacols = .PARTICIPANT_METADATA_COLS
 )
 }
@@ -19,8 +21,15 @@ getAssayData(
 e.g., "01" for Primary Solid Tumors, see
 \code{data("sampleTypes", package = "TCGAutils")} for reference}
 
-\item{tablename}{The terra data model table from which to extract the
+\item{tablename}{The Terra data model table from which to extract the
 clinical data (default: "sample")}
+
+\item{workspace}{character(1) The Terra Data Resources workspace from which
+to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+package-wide option.}
+
+\item{namespace}{character(1) The Terra Workspace Namespace that
+defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
@@ -36,7 +45,6 @@ Obtain assay datasets from Terra
 getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     sampleCode = c("01", "10"),
-    tablename = "sample"
 )
 
 getAssayData(

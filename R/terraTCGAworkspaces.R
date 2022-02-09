@@ -1,3 +1,5 @@
+.DEFAULT_NAMESPACE <- "broad-firecloud-tcga"
+
 #' Obtain or set the Terra Workspace Project Dataset
 #'
 #' Terra allows access to about 71 open access TCGA datasets. A dataset
@@ -39,7 +41,7 @@ findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
 }
 
 setTerraWorkspace <-
-    function(projectName, namespace = "broad-firecloud-tcga")
+    function(projectName, namespace = .DEFAULT_NAMESPACE)
 {
     ws <- getOption("terraTCGAdata.workspace")
     if (!nzchar(ws) || is.null(ws)) {
@@ -57,5 +59,5 @@ setTerraWorkspace <-
         }
         options("terraTCGAdata.workspace" = ws)
     }
-    c(namespace = namespace, name = ws)
+    ws
 }

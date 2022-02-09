@@ -4,14 +4,30 @@
 \alias{getClinicalTable}
 \title{Obtain the reference table for clinical data}
 \usage{
-getClinicalTable(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+getClinicalTable(
+  tablename = .DEFAULT_TABLENAME,
+  metacols = .PARTICIPANT_METADATA_COLS,
+  workspace = terraWorkspace(),
+  namespace = .DEFAULT_NAMESPACE,
+  verbose = TRUE
+)
 }
 \arguments{
-\item{tablename}{The terra data model table from which to extract the
+\item{tablename}{The Terra data model table from which to extract the
 clinical data (default: "sample")}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
+
+\item{workspace}{character(1) The Terra Data Resources workspace from which
+to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+package-wide option.}
+
+\item{namespace}{character(1) The Terra Workspace Namespace that
+defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
+
+\item{verbose}{logical(1) Whether to output additional information regarding
+the workspace and namespace (default: \code{TRUE}).}
 }
 \value{
 A tibble of Google Storage resource locations e.g.,

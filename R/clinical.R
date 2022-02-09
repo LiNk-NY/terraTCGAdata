@@ -18,9 +18,19 @@ NULL
 #'
 #' @export
 getClinicalTable <-
-    function(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+    function(
+        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
+        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        verbose = TRUE
+    )
 {
-    samples <- avtable(tablename)
+    if (verbose)
+        message(
+            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+        )
+    samples <- avtable(
+        tablename, namespace = namespace, name = workspace
+    )
     metadata <- samples[, metacols]
     samples <- samples[, !names(samples) %in% metacols]
     samples[, grep("clin", names(samples))]
@@ -31,15 +41,25 @@ getClinicalTable <-
 #' The participant table may contain curated demographic information e.g.,
 #' sex, age, etc.
 #'
-#' @param tablename The terra data model table from which to extract the
-#'     clinical data (default: "sample")
+#' @param columnName The name of the column to extract files, see
+#'     `getClinicalTable` table. If not provided, the first column in the table
+#'     will be used to obtain the clinical information.
 #'
 #' @param participants logical(1) Whether to merge the participant table
 #'     from `avtable("participant")` to the clinical data
 #'
-#' @param columnName The name of the column to extract files, see
-#'     `getClinicalTable` table. If not provided, the first column in the table
-#'     will be used to obtain the clinical information.
+#' @param tablename The Terra data model table from which to extract the
+#'     clinical data (default: "sample")
+#'
+#' @param workspace character(1) The Terra Data Resources workspace from which
+#'     to pull TCGA data (default: see `terraWorkspace()`). This is set to a
+#'     package-wide option.
+#'
+#' @param namespace character(1) The Terra Workspace Namespace that
+#'     defaults to "broad-firecloud-tcga" and rarely needs to be changed.
+#'
+#' @param verbose logical(1) Whether to output additional information regarding
+#'     the workspace and namespace (default: `TRUE`).
 #'
 #' @param metacols The set of columns that comprise of the metadata columns.
 #'     See the `.PARTICIPANT_METADATA_COLS` global variable
@@ -56,10 +76,15 @@ getClinicalTable <-
 #' getClinical()
 #'
 getClinical <-
-    function(columnName, participants = TRUE, tablename = "sample",
-        metacols = .PARTICIPANT_METADATA_COLS)
+    function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
+        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS
+    )
 {
-    allclin <- getClinicalTable(tablename = tablename, metacols = metacols)
+    allclin <- getClinicalTable(
+        tablename = tablename, workspace = workspace, namespace = namespace,
+        metacols = metacols
+    )
     if (missing(columnName))
         columnName <- names(allclin)[1L]
     clinfiles <- unlist(unique(allclin[, columnName]))
@@ -89,6 +114,8 @@ getClinical <-
 #' table for the current workspace. Along with the sample codes and frequencies,
 #' the output provides a description for each code and the short letter codes.
 #'
+#' @inheritParams getClinical
+#'
 #' @return A `tibble` of sample codes and frequency along with their
 #'     definition and short letter code
 #'
@@ -99,8 +126,20 @@ getClinical <-
 #' sampleTypesTable()
 #'
 #' @export
-sampleTypesTable <- function() {
-    stable <- table(avtable("sample")[["sample_type"]])
+sampleTypesTable <-
+    function(
+        workspace = terraWorkspace(),
+        namespace = .DEFAULT_NAMESPACE,
+        tablename = .DEFAULT_TABLENAME,
+        verbose = TRUE
+    )
+{
+    if (verbose)
+        message(
+            "Using namespaece/workspace: ", paste0(namespace, "/", workspace)
+        )
+    avtab <- avtable(tablename, namespace = namespace, name = workspace)
+    stable <- table(avtab[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
     utils::data("sampleTypes", envir = dataenv, package = "TCGAutils")
     stypes <- dataenv[["sampleTypes"]]

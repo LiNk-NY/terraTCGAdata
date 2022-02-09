@@ -4,14 +4,26 @@
 \alias{getAssayTable}
 \title{Obtain a reference table for assay data in the Terra data model}
 \usage{
-getAssayTable(tablename = "sample", metacols = .PARTICIPANT_METADATA_COLS)
+getAssayTable(
+  tablename = .DEFAULT_TABLENAME,
+  metacols = .PARTICIPANT_METADATA_COLS,
+  workspace = terraWorkspace(),
+  namespace = .DEFAULT_NAMESPACE
+)
 }
 \arguments{
-\item{tablename}{The terra data model table from which to extract the
+\item{tablename}{The Terra data model table from which to extract the
 clinical data (default: "sample")}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
+
+\item{workspace}{character(1) The Terra Data Resources workspace from which
+to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+package-wide option.}
+
+\item{namespace}{character(1) The Terra Workspace Namespace that
+defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
 }
 \value{
 A tibble of pointers to resources within the Terra data model

@@ -9,7 +9,11 @@ terraTCGAdata(
   assays,
   participants = TRUE,
   sampleCode = NULL,
-  split = FALSE
+  split = FALSE,
+  workspace = terraWorkspace(),
+  namespace = .DEFAULT_NAMESPACE,
+  tablename = .DEFAULT_TABLENAME,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -28,6 +32,19 @@ kept in the data.}
 
 \item{split}{logical(1L) Whether or not to split the \code{MultiAssayExperiment}
 by sample types using \code{splitAssays} helper function (default FALSE).}
+
+\item{workspace}{character(1) The Terra Data Resources workspace from which
+to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+package-wide option.}
+
+\item{namespace}{character(1) The Terra Workspace Namespace that
+defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
+
+\item{tablename}{The Terra data model table from which to extract the
+clinical data (default: "sample")}
+
+\item{verbose}{logical(1) Whether to output additional information regarding
+the workspace and namespace (default: \code{TRUE}).}
 }
 \value{
 A \code{MultiAssayExperiment} object with n number of assays corresponding
