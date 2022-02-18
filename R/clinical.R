@@ -20,7 +20,7 @@ NULL
 getClinicalTable <-
     function(
         tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
-        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE
     )
 {
@@ -52,7 +52,7 @@ getClinicalTable <-
 #'     clinical data (default: "sample")
 #'
 #' @param workspace character(1) The Terra Data Resources workspace from which
-#'     to pull TCGA data (default: see `terraWorkspace()`). This is set to a
+#'     to pull TCGA data (default: see `terraTCGAworkspace()`). This is set to a
 #'     package-wide option.
 #'
 #' @param namespace character(1) The Terra Workspace Namespace that
@@ -77,7 +77,7 @@ getClinicalTable <-
 #'
 getClinical <-
     function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
-        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS
     )
 {
@@ -128,7 +128,7 @@ getClinical <-
 #' @export
 sampleTypesTable <-
     function(
-        workspace = terraWorkspace(),
+        workspace = terraTCGAworkspace(),
         namespace = .DEFAULT_NAMESPACE,
         tablename = .DEFAULT_TABLENAME,
         verbose = TRUE

@@ -18,7 +18,7 @@
 getAssayTable <-
     function(
         tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
-        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE
+        workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE
     )
 {
     samples <- avtable(
@@ -57,7 +57,7 @@ getAssayTable <-
 #' @export
 getAssayData <-
     function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAME,
-        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         metacols = .PARTICIPANT_METADATA_COLS
     )
 {
@@ -154,7 +154,7 @@ getAssayData <-
 #' @export
 ExperimentListData <-
     function(
-        assayNames, sampleCode, workspace = terraWorkspace(),
+        assayNames, sampleCode, workspace = terraTCGAworkspace(),
         namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAME,
         verbose = TRUE
     )
@@ -216,7 +216,7 @@ terraTCGAdata <-
     function(
         clinicalName, assays, participants = TRUE,
         sampleCode = NULL, split = FALSE,
-        workspace = terraWorkspace(), namespace = .DEFAULT_NAMESPACE,
+        workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         tablename = .DEFAULT_TABLENAME, verbose = TRUE
     )
 {
