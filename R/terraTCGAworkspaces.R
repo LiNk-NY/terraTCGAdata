@@ -50,6 +50,7 @@ setTerraWorkspace <-
             validPC <- projectName %in% tcga_choices
             if (!validPC)
                 stop("'projectName' not in the 'findTCGAworkspaces()' list ")
+            ws <- projectName
         } else {
             wsi <- menu(
                 tcga_choices,
