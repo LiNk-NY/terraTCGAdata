@@ -1,4 +1,4 @@
-.DEFAULT_TABLENAME <- "sample"
+.DEFAULT_TABLENAMES <- c("sample", "participant")
 
 #' Obtain a reference table for assay data in the Terra data model
 #'
@@ -17,14 +17,15 @@
 #' @export
 getAssayTable <-
     function(
-        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
+        tablename = .DEFAULT_TABLENAMES, metacols = .PARTICIPANT_METADATA_COLS,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE
     )
 {
+    tablename <- match.arg(tablename)
     samples <- avtable(
         table = tablename, namespace = namespace, name = workspace
     )
-    metadata <- samples[, metacols]
+    metadata <- samples[, names(samples) %in% metacols]
     samples <- samples[, !names(samples) %in% metacols]
     samples[, grep("clin", names(samples), invert = TRUE)]
 }
@@ -56,13 +57,14 @@ getAssayTable <-
 #'
 #' @export
 getAssayData <-
-    function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAME,
+    function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAMES,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         metacols = .PARTICIPANT_METADATA_COLS
     )
 {
     if (missing(assayName))
         stop("Select an assay name from 'getAssayTable'")
+    tablename <- match.arg(tablename)
 
     assayTable <- getAssayTable(
         tablename = tablename, metacols = metacols,
@@ -155,7 +157,7 @@ getAssayData <-
 ExperimentListData <-
     function(
         assayNames, sampleCode, workspace = terraTCGAworkspace(),
-        namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAME,
+        namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAMES,
         verbose = TRUE
     )
 {
@@ -163,6 +165,7 @@ ExperimentListData <-
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
+    tablename <- match.arg(tablename)
     elist <- structure(vector("list", length(assayNames)), .Names = assayNames)
     for (assay in assayNames) {
         elist[[assay]] <-
@@ -217,13 +220,14 @@ terraTCGAdata <-
         clinicalName, assays, participants = TRUE,
         sampleCode = NULL, split = FALSE,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
-        tablename = .DEFAULT_TABLENAME, verbose = TRUE
+        tablename = .DEFAULT_TABLENAMES, verbose = TRUE
     )
 {
     if (verbose)
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
+    tablename <- match.arg(tablename)
     el <- ExperimentListData(
         assayNames = assays, sampleCode = sampleCode, workspace = workspace,
         namespace = namespace, tablename = tablename, verbose = FALSE

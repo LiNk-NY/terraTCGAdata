@@ -1,8 +1,16 @@
 #' @import MultiAssayExperiment AnVIL
 NULL
 
-.PARTICIPANT_METADATA_COLS <-
-    c("sample_id", "sample_type", "participant", "tcga_sample_id")
+.PARTICIPANT_METADATA_COLS <- c("sample_id", "sample_type", "participant",
+    "tcga_sample_id", "submitter_id")
+
+.isGDC <- function(workspacename) {
+    grepl("GDC", workspacename, fixed = TRUE)
+}
+
+.anyClinical <- function(avtab) {
+    any(grepl("biospecimen|clin", names(avtab)))
+}
 
 #' Obtain the reference table for clinical data
 #'
@@ -19,7 +27,7 @@ NULL
 #' @export
 getClinicalTable <-
     function(
-        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
+        tablename = .DEFAULT_TABLENAMES, metacols = .PARTICIPANT_METADATA_COLS,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE
     )
@@ -28,12 +36,20 @@ getClinicalTable <-
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    samples <- avtable(
+    if (.isGDC(workspace))
+        tablename <- tail(tablename, 1L)
+    
+    avtab <- avtable(
         tablename, namespace = namespace, name = workspace
     )
-    metadata <- samples[, metacols]
-    samples <- samples[, !names(samples) %in% metacols]
-    samples[, grep("clin", names(samples))]
+
+    if (!.anyClinical(avtab))
+        stop("No clinical column found under DATA > ", tablename)
+    
+    metadata <- avtab[, names(avtab) %in% metacols]
+    avtab <- avtab[, !names(avtab) %in% metacols]
+        
+    avtab[, grep("clin", names(avtab))]
 }
 
 #' Obtain clinical data
@@ -76,7 +92,7 @@ getClinicalTable <-
 #' getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
 #'
 getClinical <-
-    function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
+    function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAMES,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS
     )
@@ -130,7 +146,7 @@ sampleTypesTable <-
     function(
         workspace = terraTCGAworkspace(),
         namespace = .DEFAULT_NAMESPACE,
-        tablename = .DEFAULT_TABLENAME,
+        tablename = .DEFAULT_TABLENAMES,
         verbose = TRUE
     )
 {
