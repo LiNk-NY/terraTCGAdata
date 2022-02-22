@@ -23,6 +23,13 @@ workspace can be set using the \code{terraTCGAworkspace} function with a \code{p
 input. Use the \code{findTCGAworkspaces} function to list all of the available
 open access TCGA data workspaces.
 }
+\details{
+\preformatted{Note that GDC workspaces are not supported and are excluded
+from the search results. GDC workspaces use a Terra workflow to download
+TCGA data rather than providing Google Bucket storage locations for easy
+data retrieval.
+}
+}
 \section{Functions}{
 \itemize{
 \item \code{findTCGAworkspaces}: Function to enumerate the available TCGA data

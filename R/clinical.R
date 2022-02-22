@@ -2,14 +2,11 @@
 NULL
 
 .PARTICIPANT_METADATA_COLS <- c("sample_id", "sample_type", "participant",
-    "tcga_sample_id", "submitter_id")
+    "tcga_sample_id", "submitter_id", "participant_id", "project_id")
 
 .isGDC <- function(workspacename) {
-    grepl("GDC", workspacename, fixed = TRUE)
-}
-
-.anyClinical <- function(avtab) {
-    any(grepl("biospecimen|clin", names(avtab)))
+    if (grepl("GDC", workspacename, fixed = TRUE))
+        stop("GDC Workspaces are not supported.")
 }
 
 #' Obtain the reference table for clinical data
@@ -36,15 +33,11 @@ getClinicalTable <-
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    if (.isGDC(workspace))
-        tablename <- tail(tablename, 1L)
+    .isGDC(workspace)
     
     avtab <- avtable(
         tablename, namespace = namespace, name = workspace
     )
-
-    if (!.anyClinical(avtab))
-        stop("No clinical column found under DATA > ", tablename)
     
     metadata <- avtab[, names(avtab) %in% metacols]
     avtab <- avtab[, !names(avtab) %in% metacols]

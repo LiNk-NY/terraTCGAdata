@@ -7,6 +7,12 @@
 #' input. Use the `findTCGAworkspaces` function to list all of the available
 #' open access TCGA data workspaces.
 #'
+#' @details 
+#'     Note that GDC workspaces are not supported and are excluded
+#'     from the search results. GDC workspaces use a Terra workflow to download
+#'     TCGA data rather than providing Google Bucket storage locations for easy
+#'     data retrieval.
+#'
 #' @aliases findTCGAworkspaces
 #'
 #' @param projectName character(1) A project code usually in the form of
@@ -35,6 +41,8 @@ terraTCGAworkspace <- function(projectName = NULL) {
 #' @export
 findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
     avs <- avworkspaces()
+    gdcind <- -grep("GDCDR", avs[["name"]])
+    avs <- avs[gdcind, ]
     project_code <- paste(project, cancerCode, sep = "_")
     ind <- grep(project_code, avs[["name"]])
     avs[ind, ]
