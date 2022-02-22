@@ -10,7 +10,7 @@ terraTCGAdata(
   participants = TRUE,
   sampleCode = NULL,
   split = FALSE,
-  workspace = terraWorkspace(),
+  workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
   tablename = .DEFAULT_TABLENAME,
   verbose = TRUE
@@ -34,7 +34,7 @@ kept in the data.}
 by sample types using \code{splitAssays} helper function (default FALSE).}
 
 \item{workspace}{character(1) The Terra Data Resources workspace from which
-to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+to pull TCGA data (default: see \code{terraTCGAworkspace()}). This is set to a
 package-wide option.}
 
 \item{namespace}{character(1) The Terra Workspace Namespace that

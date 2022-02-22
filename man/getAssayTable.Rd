@@ -7,7 +7,7 @@
 getAssayTable(
   tablename = .DEFAULT_TABLENAME,
   metacols = .PARTICIPANT_METADATA_COLS,
-  workspace = terraWorkspace(),
+  workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE
 )
 }
@@ -19,7 +19,7 @@ clinical data (default: "sample")}
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
 
 \item{workspace}{character(1) The Terra Data Resources workspace from which
-to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+to pull TCGA data (default: see \code{terraTCGAworkspace()}). This is set to a
 package-wide option.}
 
 \item{namespace}{character(1) The Terra Workspace Namespace that

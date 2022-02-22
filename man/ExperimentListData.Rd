@@ -7,7 +7,7 @@
 ExperimentListData(
   assayNames,
   sampleCode,
-  workspace = terraWorkspace(),
+  workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
   tablename = .DEFAULT_TABLENAME,
   verbose = TRUE
@@ -22,7 +22,7 @@ e.g., "01" for Primary Solid Tumors, see
 \code{data("sampleTypes", package = "TCGAutils")} for reference}
 
 \item{workspace}{character(1) The Terra Data Resources workspace from which
-to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+to pull TCGA data (default: see \code{terraTCGAworkspace()}). This is set to a
 package-wide option.}
 
 \item{namespace}{character(1) The Terra Workspace Namespace that

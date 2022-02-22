@@ -8,7 +8,7 @@ getClinical(
   columnName,
   participants = TRUE,
   tablename = .DEFAULT_TABLENAME,
-  workspace = terraWorkspace(),
+  workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
   verbose = TRUE,
   metacols = .PARTICIPANT_METADATA_COLS
@@ -26,7 +26,7 @@ from \code{avtable("participant")} to the clinical data}
 clinical data (default: "sample")}
 
 \item{workspace}{character(1) The Terra Data Resources workspace from which
-to pull TCGA data (default: see \code{terraWorkspace()}). This is set to a
+to pull TCGA data (default: see \code{terraTCGAworkspace()}). This is set to a
 package-wide option.}
 
 \item{namespace}{character(1) The Terra Workspace Namespace that
