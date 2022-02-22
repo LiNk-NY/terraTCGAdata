@@ -1,4 +1,4 @@
-.DEFAULT_TABLENAMES <- c("sample", "participant")
+.DEFAULT_TABLENAME <- "sample"
 
 #' Obtain a reference table for assay data in the Terra data model
 #'
@@ -17,11 +17,11 @@
 #' @export
 getAssayTable <-
     function(
-        tablename = .DEFAULT_TABLENAMES, metacols = .PARTICIPANT_METADATA_COLS,
+        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE
     )
 {
-    tablename <- match.arg(tablename)
+    .isGDC(workspace)
     samples <- avtable(
         table = tablename, namespace = namespace, name = workspace
     )
@@ -57,7 +57,7 @@ getAssayTable <-
 #'
 #' @export
 getAssayData <-
-    function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAMES,
+    function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAME,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         metacols = .PARTICIPANT_METADATA_COLS
     )
@@ -157,7 +157,7 @@ getAssayData <-
 ExperimentListData <-
     function(
         assayNames, sampleCode, workspace = terraTCGAworkspace(),
-        namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAMES,
+        namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAME,
         verbose = TRUE
     )
 {
@@ -220,7 +220,7 @@ terraTCGAdata <-
         clinicalName, assays, participants = TRUE,
         sampleCode = NULL, split = FALSE,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
-        tablename = .DEFAULT_TABLENAMES, verbose = TRUE
+        tablename = .DEFAULT_TABLENAME, verbose = TRUE
     )
 {
     if (verbose)

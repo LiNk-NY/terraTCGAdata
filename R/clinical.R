@@ -27,7 +27,7 @@ NULL
 #' @export
 getClinicalTable <-
     function(
-        tablename = .DEFAULT_TABLENAMES, metacols = .PARTICIPANT_METADATA_COLS,
+        tablename = .DEFAULT_TABLENAME, metacols = .PARTICIPANT_METADATA_COLS,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE
     )
@@ -92,7 +92,7 @@ getClinicalTable <-
 #' getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
 #'
 getClinical <-
-    function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAMES,
+    function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
         verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS
     )
@@ -146,7 +146,7 @@ sampleTypesTable <-
     function(
         workspace = terraTCGAworkspace(),
         namespace = .DEFAULT_NAMESPACE,
-        tablename = .DEFAULT_TABLENAMES,
+        tablename = .DEFAULT_TABLENAME,
         verbose = TRUE
     )
 {
