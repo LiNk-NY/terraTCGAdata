@@ -64,7 +64,6 @@ getAssayData <-
 {
     if (missing(assayName))
         stop("Select an assay name from 'getAssayTable'")
-    tablename <- match.arg(tablename)
 
     assayTable <- getAssayTable(
         tablename = tablename, metacols = metacols,
@@ -165,7 +164,6 @@ ExperimentListData <-
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    tablename <- match.arg(tablename)
     elist <- structure(vector("list", length(assayNames)), .Names = assayNames)
     for (assay in assayNames) {
         elist[[assay]] <-
@@ -227,7 +225,6 @@ terraTCGAdata <-
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    tablename <- match.arg(tablename)
     el <- ExperimentListData(
         assayNames = assays, sampleCode = sampleCode, workspace = workspace,
         namespace = namespace, tablename = tablename, verbose = FALSE
