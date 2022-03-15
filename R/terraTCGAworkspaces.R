@@ -53,6 +53,7 @@ setTerraWorkspace <-
 {
     ws <- getOption("terraTCGAdata.workspace")
     if ((!nzchar(ws) || is.null(ws)) && missing(projectName)) {
+        tcga_choices <- findTCGAworkspaces()[["name"]]
         wsi <- menu(
             tcga_choices,
             title = "Select a TCGA terra Workspace: "
