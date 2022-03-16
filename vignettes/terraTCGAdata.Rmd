@@ -58,7 +58,8 @@ column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
 clin <- getClinical(
     columnName = column_name,
     participants = TRUE,
-    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA",
+    sampleIdx = 1:2
 )
 clin[, 1:6]
 dim(clin)
@@ -79,9 +80,10 @@ sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 prot <- getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     sampleCode = c("01", "10"),
-    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA",
+    sampleIdx = 1:4
 )
-prot[, 1:5]
+head(prot)
 ```
 
 # MultiAssayExperiment
@@ -94,6 +96,7 @@ mae <- terraTCGAdata(
       "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
     sampleCode = NULL,
     split = FALSE,
+    sampleIdx = 1:4,
     workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
 )
 mae

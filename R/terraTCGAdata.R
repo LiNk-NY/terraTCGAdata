@@ -41,6 +41,10 @@ getAssayTable <-
 #'     e.g., "01" for Primary Solid Tumors, see
 #'     `data("sampleTypes", package = "TCGAutils")` for reference
 #'
+#' @param sampleIdx numeric() index or TRUE. Specify an index for subsetting the
+#'     assay data. This argument is mainly used for example and vignette
+#'     purposes. To use all the data, use the default value (default: `TRUE`)
+#'
 #' @return Either a matrix or RaggedExperiment depending on the assay selected
 #'
 #' @seealso [getAssayTable()]
@@ -59,7 +63,7 @@ getAssayTable <-
 getAssayData <-
     function(assayName, sampleCode = "01", tablename = .DEFAULT_TABLENAME,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
-        metacols = .PARTICIPANT_METADATA_COLS
+        metacols = .PARTICIPANT_METADATA_COLS, sampleIdx = TRUE
     )
 {
     if (missing(assayName))
@@ -69,28 +73,29 @@ getAssayData <-
         tablename = tablename, metacols = metacols,
         workspace = workspace, namespace = namespace
     )
-    assayfiles <- unlist(unique(stats::na.omit(assayTable[, assayName])))
+    assaylinks <- stats::na.omit(assayTable[, assayName])
+    assayfiles <- unlist(unique(assaylinks))
+    if (length(assayfiles[sampleIdx]) > 800)
+        assayfiles <- split(
+            assayfiles, cut(seq_along(assayfiles), 3, labels = letters[1:3])
+        )
 
     bfc <- BiocFileCache::BiocFileCache()
     rpath <- BiocFileCache::bfcquery(bfc, assayName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
         rpath <- BiocFileCache::bfcnew(bfc, rname = assayName, rtype = "local")
         dir.create(rpath)
-        if (length(assayfiles) > 800)
-            lapply(
-                split(assayfiles,
-                      cut(seq_along(assayfiles), 3, labels = letters[1:3])),
-                gsutil_cp,
-                destination = rpath
-            )
+        if (is.list(assayfiles))
+            lapply(assayfiles, gsutil_cp, destination = rpath)
         else
-            gsutil_cp(assayfiles, rpath)
+            gsutil_cp(assayfiles[sampleIdx], rpath)
     }
 
-    assaycopied <- list.files(rpath, pattern = "\\.txt", full.names = TRUE)
+    assaydl <- list.files(rpath, pattern = "\\.txt", full.names = TRUE)
+    dfiles <- assaydl[sampleIdx]
     suffix <-
         if (grepl("^cna|snp", assayName)) { ".seg.txt" } else { ".data.txt" }
-    tcgaids <- gsub(suffix, "", basename(assaycopied), fixed = TRUE)
+    tcgaids <- gsub(suffix, "", basename(dfiles), fixed = TRUE)
     if (!missing(sampleCode) && .is_character(sampleCode) && !is.null(sampleCode))
         tcgaids <- tcgaids[
             TCGAutils::TCGAsampleSelect(tcgaids, sampleCodes = sampleCode)
@@ -132,20 +137,20 @@ getAssayData <-
     }
 }
 
-#' Import Terra TCGA data as an ExperimentList
+#' Import Terra TCGA data as a list
 #'
 #' @inheritParams getAssayData
 #'
 #' @param assayNames character() A vector of assays selected from the colnames
 #'     of `getAssayTable`.
 #'
-#' @return An `ExperimentList` of assays
+#' @return A `list` of assay datasets
 #'
 #' @md
 #'
 #' @examples
 #'
-#' ExperimentListData(
+#' getTCGAdatalist(
 #'     assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
 #'     "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
 #'     sampleCode = c("01", "10"),
@@ -153,26 +158,27 @@ getAssayData <-
 #' )
 #'
 #' @export
-ExperimentListData <-
+getTCGAdatalist <-
     function(
         assayNames, sampleCode, workspace = terraTCGAworkspace(),
         namespace = .DEFAULT_NAMESPACE, tablename = .DEFAULT_TABLENAME,
-        verbose = TRUE
+        sampleIdx = TRUE, verbose = TRUE 
     )
 {
     if (verbose)
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    elist <- structure(vector("list", length(assayNames)), .Names = assayNames)
+    dlist <- structure(vector("list", length(assayNames)), .Names = assayNames)
     for (assay in assayNames) {
-        elist[[assay]] <-
+        dlist[[assay]] <-
             getAssayData(
                 assay, sampleCode = sampleCode, tablename = tablename,
-                workspace = workspace, namespace = namespace
+                workspace = workspace, namespace = namespace,
+                sampleIdx = sampleIdx
             )
     }
-    ExperimentList(elist)
+    dlist
 }
 
 #' Obtain a MultiAssayExperiment from the Terra workspace
@@ -209,6 +215,7 @@ ExperimentListData <-
 #'     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
 #'     workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
 #'     sampleCode = NULL,
+#'     sampleIdx = 1:4,
 #'     split = FALSE
 #' )
 #'
@@ -218,29 +225,36 @@ terraTCGAdata <-
         clinicalName, assays, participants = TRUE,
         sampleCode = NULL, split = FALSE,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
-        tablename = .DEFAULT_TABLENAME, verbose = TRUE
+        tablename = .DEFAULT_TABLENAME, verbose = TRUE, sampleIdx = TRUE
     )
 {
     if (verbose)
         message(
             "Using namespace/workspace: ", paste0(namespace, "/", workspace)
         )
-    el <- ExperimentListData(
+    datalist <- getTCGAdatalist(
         assayNames = assays, sampleCode = sampleCode, workspace = workspace,
-        namespace = namespace, tablename = tablename, verbose = FALSE
+        namespace = namespace, tablename = tablename, sampleIdx = sampleIdx,
+        verbose = FALSE
+    )
+    explist <- as(datalist, "ExperimentList")
+    partIds <- TCGAutils::TCGAbarcode(
+        unique(unlist(colnames(explist), use.names = FALSE))
     )
     coldata <- getClinical(
         columnName = clinicalName, workspace = workspace,
-        namespace = namespace, verbose = FALSE
+        namespace = namespace, participantIds = partIds, verbose = FALSE
     )
     coldata <- .transform_clinical_to_coldata(
         clinical_data = coldata,
         columnName = clinicalName,
-        participants = participants
+        participants = participants,
+        workspace = workspace,
+        namespace = namespace
     )
-    samap <- TCGAutils::generateMap(el, coldata, TCGAutils::TCGAbarcode)
+    samap <- TCGAutils::generateMap(datalist, coldata, TCGAutils::TCGAbarcode)
     mae <- MultiAssayExperiment(
-        experiments = el, colData = coldata, sampleMap = samap
+        experiments = datalist, colData = coldata, sampleMap = samap
     )
     if (split && (length(sampleCode) || !is.null(sampleCode))) {
         TCGAutils::TCGAsplitAssays(
@@ -252,14 +266,16 @@ terraTCGAdata <-
 }
 
 .transform_clinical_to_coldata <-
-    function(clinical_data, columnName, participants)
+    function(clinical_data, columnName, participants, workspace, namespace)
 {
     coldata <- as.data.frame(clinical_data)
     if (!is.null(coldata[["patient.bcr_patient_barcode"]])) {
         rownames(coldata) <- coldata[["participant_id"]] <-
             toupper(coldata[["patient.bcr_patient_barcode"]])
         if (participants) {
-            parts <- avtable("participant")
+            parts <- avtable(
+                table = "participant", namespace = namespace, name = workspace
+            )
             parts <- methods::as(parts, "DataFrame")
             rownames(parts) <- parts[["participant_id"]]
             ## replace munged COAD with TCGA

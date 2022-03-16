@@ -13,7 +13,8 @@ terraTCGAdata(
   workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
   tablename = .DEFAULT_TABLENAME,
-  verbose = TRUE
+  verbose = TRUE,
+  sampleIdx = TRUE
 )
 }
 \arguments{
@@ -63,6 +64,7 @@ terraTCGAdata(
     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
     workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
     sampleCode = NULL,
+    sampleIdx = 1:4,
     split = FALSE
 )
 

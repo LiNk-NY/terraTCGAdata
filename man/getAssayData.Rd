@@ -10,7 +10,8 @@ getAssayData(
   tablename = .DEFAULT_TABLENAME,
   workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
-  metacols = .PARTICIPANT_METADATA_COLS
+  metacols = .PARTICIPANT_METADATA_COLS,
+  sampleIdx = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,10 @@ defaults to "broad-firecloud-tcga" and rarely needs to be changed.}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
+
+\item{sampleIdx}{numeric() index or TRUE. Specify an index for subsetting the
+assay data. This argument is mainly used for example and vignette
+purposes. To use all the data, use the default value (default: \code{TRUE})}
 }
 \value{
 Either a matrix or RaggedExperiment depending on the assay selected

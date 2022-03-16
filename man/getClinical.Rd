@@ -11,7 +11,8 @@ getClinical(
   workspace = terraTCGAworkspace(),
   namespace = .DEFAULT_NAMESPACE,
   verbose = TRUE,
-  metacols = .PARTICIPANT_METADATA_COLS
+  metacols = .PARTICIPANT_METADATA_COLS,
+  participantIds = NULL
 )
 }
 \arguments{
@@ -37,6 +38,10 @@ the workspace and namespace (default: \code{TRUE}).}
 
 \item{metacols}{The set of columns that comprise of the metadata columns.
 See the \code{.PARTICIPANT_METADATA_COLS} global variable}
+
+\item{participantIds}{character() TCGA participant identifiers usually in the
+form of "TCGA-AB-1234". By default, all available participant identifiers
+will be used. (default: \code{NULL})}
 }
 \value{
 A \code{DataFrame} with clinical information from TCGA. The metadata i.e.,
@@ -48,6 +53,10 @@ sex, age, etc.
 }
 \examples{
 
-getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
+getClinical(
+    workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
+    sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
+        "TCGA-4T-AA8H", "TCGA-5M-AAT5")
+)
 
 }

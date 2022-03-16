@@ -72,6 +72,10 @@ getClinicalTable <-
 #'
 #' @param metacols The set of columns that comprise of the metadata columns.
 #'     See the `.PARTICIPANT_METADATA_COLS` global variable
+#' 
+#' @param participantIds character() TCGA participant identifiers usually in the
+#'     form of "TCGA-AB-1234". By default, all available participant identifiers
+#'     will be used. (default: `NULL`)
 #'
 #' @return A `DataFrame` with clinical information from TCGA. The metadata i.e.,
 #'     `metadata(object)` includes the `columnName` used to obtain the data.
@@ -82,12 +86,17 @@ getClinicalTable <-
 #'
 #' @examples
 #'
-#' getClinical(workspace = "TCGA_ACC_OpenAccess_V1-0_DATA")
+#' getClinical(
+#'     workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
+#'     sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
+#'         "TCGA-4T-AA8H", "TCGA-5M-AAT5")
+#' )
 #'
 getClinical <-
     function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
         workspace = terraTCGAworkspace(), namespace = .DEFAULT_NAMESPACE,
-        verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS
+        verbose = TRUE, metacols = .PARTICIPANT_METADATA_COLS,
+        participantIds = NULL
     )
 {
     allclin <- getClinicalTable(
@@ -96,7 +105,15 @@ getClinical <-
     )
     if (missing(columnName))
         columnName <- names(allclin)[1L]
-    clinfiles <- unlist(unique(allclin[, columnName]))
+    clinlinks <- allclin[, columnName]
+    clinfiles <- unlist(unique(clinlinks))
+    if (!is.null(sampleNames)) {
+        clindex <-
+            gsub(".clin.txt", "", basename(clinfiles)) %in% participantIds
+        clinfiles <- clinfiles[clindex]
+    }
+    participantIds <- gsub(".clin.txt", "", basename(clinfiles), fixed = TRUE)
+    
     bfc <- BiocFileCache::BiocFileCache()
     rpath <- BiocFileCache::bfcquery(bfc, columnName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
@@ -104,9 +121,18 @@ getClinical <-
         dir.create(rpath)
         gsutil_cp(clinfiles, rpath)
     }
+    dlfiles <- list.files(rpath, full.names = TRUE, pattern = "\\.clin\\.txt$")
+    mfiles <- !participantIds %in%
+        gsub(".clin.txt", "", basename(dlfiles), fixed = TRUE)
+    if (any(mfiles)) {
+        clindex <- match(
+            participantIds[mfiles], gsub(".clin.txt", "", basename(clinfiles))
+        )
+        gsutil_cp(clinfiles[clindex], rpath)
+    }
 
     clinrows <- lapply(
-        list.files(rpath, full.names = TRUE),
+        list.files(rpath, full.names = TRUE, pattern = "\\.clin\\.txt$"),
         readr::read_tsv,
         show_col_types = FALSE
     )
