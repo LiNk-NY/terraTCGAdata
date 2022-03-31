@@ -52,11 +52,11 @@ The participant table may contain curated demographic information e.g.,
 sex, age, etc.
 }
 \examples{
-
-getClinical(
-    workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
-    sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
-        "TCGA-4T-AA8H", "TCGA-5M-AAT5")
-)
+if (AnVIL::gcloud_exists())
+  getClinical(
+      workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
+      participantIds = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
+          "TCGA-4T-AA8H", "TCGA-5M-AAT5")
+  )
 
 }

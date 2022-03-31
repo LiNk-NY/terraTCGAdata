@@ -88,7 +88,7 @@ getClinicalTable <-
 #' if (AnVIL::gcloud_exists())
 #'   getClinical(
 #'       workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
-#'       sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
+#'       participantIds = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
 #'           "TCGA-4T-AA8H", "TCGA-5M-AAT5")
 #'   )
 #'
@@ -107,7 +107,7 @@ getClinical <-
         columnName <- names(allclin)[1L]
     clinlinks <- allclin[, columnName]
     clinfiles <- unlist(unique(clinlinks))
-    if (!is.null(sampleNames)) {
+    if (!is.null(participantIds)) {
         clindex <-
             gsub(".clin.txt", "", basename(clinfiles)) %in% participantIds
         clinfiles <- clinfiles[clindex]
