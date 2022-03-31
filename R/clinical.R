@@ -85,12 +85,12 @@ getClinicalTable <-
 #' @md
 #'
 #' @examples
-#'
-#' getClinical(
-#'     workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
-#'     sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
-#'         "TCGA-4T-AA8H", "TCGA-5M-AAT5")
-#' )
+#' if (AnVIL::gcloud_exists())
+#'   getClinical(
+#'       workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
+#'       sampleNames = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
+#'           "TCGA-4T-AA8H", "TCGA-5M-AAT5")
+#'   )
 #'
 getClinical <-
     function(columnName, participants = TRUE, tablename = .DEFAULT_TABLENAME,
@@ -157,8 +157,8 @@ getClinical <-
 #' @md
 #'
 #' @examples
-#'
-#' sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
+#' if (AnVIL::gcloud_exists())
+#'   sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 #'
 #' @export
 sampleTypesTable <-

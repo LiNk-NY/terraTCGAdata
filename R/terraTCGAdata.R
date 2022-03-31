@@ -11,8 +11,8 @@
 #' @return A tibble of pointers to resources within the Terra data model
 #'
 #' @examples
-#'
-#' getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
+#' if (AnVIL::gcloud_exists())
+#'   getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 #'
 #' @export
 getAssayTable <-
@@ -52,12 +52,12 @@ getAssayTable <-
 #' @md
 #'
 #' @examples
-#'
-#' getAssayData(
-#'     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-#'     sampleCode = c("01", "10"),
-#'     workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
-#' )
+#' if (AnVIL::gcloud_exists())
+#'   getAssayData(
+#'       assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+#'       sampleCode = c("01", "10"),
+#'       workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
+#'   )
 #'
 #' @export
 getAssayData <-
@@ -149,13 +149,13 @@ getAssayData <-
 #' @md
 #'
 #' @examples
-#'
-#' getTCGAdatalist(
-#'     assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-#'     "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
-#'     sampleCode = c("01", "10"),
-#'     workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
-#' )
+#' if (AnVIL::gcloud_exists())
+#'   getTCGAdatalist(
+#'       assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+#'       "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
+#'       sampleCode = c("01", "10"),
+#'       workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
+#'   )
 #'
 #' @export
 getTCGAdatalist <-
@@ -208,16 +208,16 @@ getTCGAdatalist <-
 #' @md
 #'
 #' @examples
-#'
-#' terraTCGAdata(
-#'     clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
-#'     assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-#'     "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
-#'     workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
-#'     sampleCode = NULL,
-#'     sampleIdx = 1:4,
-#'     split = FALSE
-#' )
+#' if (AnVIL::gcloud_exists())
+#'   terraTCGAdata(
+#'       clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
+#'       assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+#'       "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
+#'       workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
+#'       sampleCode = NULL,
+#'       sampleIdx = 1:4,
+#'       split = FALSE
+#'   )
 #'
 #' @export
 terraTCGAdata <-

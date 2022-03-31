@@ -24,8 +24,8 @@
 #' @md
 #'
 #' @examples
-#'
-#' findTCGAworkspaces()
+#' if (AnVIL::gcloud_exists())
+#'   findTCGAworkspaces()
 #'
 #' @export
 terraTCGAworkspace <- function(projectName = NULL) {
