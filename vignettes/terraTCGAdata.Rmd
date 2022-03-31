@@ -54,8 +54,6 @@ You can use the `gcloud_project` to set a project name:
 gcloud_project()
 ```
 
-
-
 # Default Data Workspace
 
 To get a list of available TCGA workspaces, use the `findTCGAworkspaces()`
