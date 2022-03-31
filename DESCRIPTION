@@ -3,7 +3,7 @@ Type: Package
 Title: OpenAccess TCGA Data on Terra as MultiAssayExperiment
 Version: 0.99.0
 Authors@R: person(
-    "Marcel", "Ramos", "M.", "marcel.ramosperez@roswellpark.org",
+    "Marcel", "Ramos", , "marcel.ramosperez@roswellpark.org",
     c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
   )
 Description: Leverage the existing open access TCGA data on Terra with
