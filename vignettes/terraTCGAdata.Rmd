@@ -12,10 +12,14 @@ output:
     toc: true
 ---
 
-# GitHub Installation
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
 
-```{r, eval = FALSE}
-if (!require("BiocManager"))
+# Installation (development version)
+
+```{r,eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("LiNk-NY/terraTCGAdata")
 ```
@@ -25,27 +29,53 @@ BiocManager::install("LiNk-NY/terraTCGAdata")
 Terra workspaces come pre-packaged with TCGA data. The challenge is to make
 use of the Terra data model and represent the data as `MultiAssayExperiment`.
 
+# Requirements
+
+## Loading packages
+
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(AnVIL)
+library(terraTCGAdata)
+```
+
+## gcloud sdk installation
+
+A valid GCloud SDK installation is required to use the package. Use the
+`gcloud_exists()` function to identify whether it is installed in your
+system.
+
+```{r}
+gcloud_exists()
+```
+
+You can use the `gcloud_project` to set a project name:
+
+```{r}
+gcloud_project()
+```
+
+
+
 # Default Data Workspace
 
 To get a list of available TCGA workspaces, use the `findTCGAworkspaces()`
 function: 
 
-```{r}
+```{r, eval=gcloud_exists()}
 findTCGAworkspaces()
 ```
 
 You can then set a package-wide option with the `terraTCGAworkspace` function
 and check the setting with the ``.
 
-```{r,eval=FALSE}
+```{r,eval=gcloud_exists()}
 terraTCGAworkspace()
 getOption("terraTCGAdata.workspace")
 ```
 
-
 # Clinical data resources
 
-```{r}
+```{r, eval=gcloud_exists()}
 ct <- getClinicalTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 ct
 names(ct)
@@ -53,13 +83,12 @@ names(ct)
 
 # Clinical data download
 
-```{r}
+```{r, eval=gcloud_exists()}
 column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
 clin <- getClinical(
     columnName = column_name,
     participants = TRUE,
-    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA",
-    sampleIdx = 1:2
+    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
 )
 clin[, 1:6]
 dim(clin)
@@ -67,7 +96,7 @@ dim(clin)
 
 # Assay data resources
 
-```{r}
+```{r, eval=gcloud_exists()}
 at <- getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 at
 names(at)
@@ -75,7 +104,7 @@ names(at)
 
 # Intermediate function for obtaining only the data
 
-```{r}
+```{r, eval=gcloud_exists()}
 sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 prot <- getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
@@ -88,7 +117,7 @@ head(prot)
 
 # MultiAssayExperiment
 
-```{r}
+```{r, eval=gcloud_exists()}
 mae <- terraTCGAdata(
     clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
     assays =
