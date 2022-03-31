@@ -13,6 +13,14 @@ findTCGAworkspaces(project = "^TCGA", cancerCode = ".*")
 \item{projectName}{character(1) A project code usually in the form of
 \verb{TCGA_CODE_OpenAccess_V1-0_DATA}. See \code{findTCGAworkspaces} for a list of
 project codes.}
+
+\item{project}{character(1) A prefix for the regex search across all public
+projects on the terra platform (default: \code{"^TCGA"}). Usually, this does not
+change.}
+
+\item{cancerCode}{character(1) Corresponds to the TCGA cancer code (e.g,
+"ACC" for AdrenoCortical Carcinoma) of interest. The default value of
+(\verb{.*}) provides all available cancer datasets.}
 }
 \value{
 A Terra TCGA Workspace name
@@ -37,7 +45,7 @@ workspaces in Terra
 }}
 
 \examples{
-
-findTCGAworkspaces()
+if (AnVIL::gcloud_exists())
+  findTCGAworkspaces()
 
 }

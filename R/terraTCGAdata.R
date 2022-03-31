@@ -144,6 +144,9 @@ getAssayData <-
 #' @param assayNames character() A vector of assays selected from the colnames
 #'     of `getAssayTable`.
 #'
+#' @param verbose logical(1L) Whether to output additional details of the
+#'   data facilitation.
+#'
 #' @return A `list` of assay datasets
 #'
 #' @md
@@ -188,6 +191,7 @@ getTCGAdatalist <-
 #' can be found on \url{app.terra.bio}.
 #'
 #' @inheritParams getClinical
+#' @inheritParams getAssayData
 #'
 #' @param clinicalName character(1) The column name taken from
 #'     `getClinicalTable()` and downloaded to be included as the `colData`.
@@ -213,7 +217,7 @@ getTCGAdatalist <-
 #'       clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
 #'       assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
 #'       "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
-#'       workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
+#'       workspace = "TCGA_COAD_OpenAccess_V1-0_DATA",
 #'       sampleCode = NULL,
 #'       sampleIdx = 1:4,
 #'       split = FALSE
@@ -235,15 +239,15 @@ terraTCGAdata <-
     datalist <- getTCGAdatalist(
         assayNames = assays, sampleCode = sampleCode, workspace = workspace,
         namespace = namespace, tablename = tablename, sampleIdx = sampleIdx,
-        verbose = FALSE
+        verbose = verbose 
     )
-    explist <- as(datalist, "ExperimentList")
+    explist <- methods::as(datalist, "ExperimentList")
     partIds <- TCGAutils::TCGAbarcode(
         unique(unlist(colnames(explist), use.names = FALSE))
     )
     coldata <- getClinical(
         columnName = clinicalName, workspace = workspace,
-        namespace = namespace, participantIds = partIds, verbose = FALSE
+        namespace = namespace, participantIds = partIds, verbose = verbose 
     )
     coldata <- .transform_clinical_to_coldata(
         clinical_data = coldata,

@@ -19,6 +19,14 @@
 #' `TCGA_CODE_OpenAccess_V1-0_DATA`. See `findTCGAworkspaces` for a list of
 #' project codes.
 #'
+#' @param project character(1) A prefix for the regex search across all public
+#' projects on the terra platform (default: `"^TCGA"`). Usually, this does not
+#' change.
+#'
+#' @param cancerCode character(1) Corresponds to the TCGA cancer code (e.g,
+#'   "ACC" for AdrenoCortical Carcinoma) of interest. The default value of
+#'   (`.*`) provides all available cancer datasets.
+#'
 #' @return A Terra TCGA Workspace name
 #'
 #' @md
@@ -54,7 +62,7 @@ setTerraWorkspace <-
     ws <- getOption("terraTCGAdata.workspace")
     if ((!nzchar(ws) || is.null(ws)) && missing(projectName)) {
         tcga_choices <- findTCGAworkspaces()[["name"]]
-        wsi <- menu(
+        wsi <- utils::menu(
             tcga_choices,
             title = "Select a TCGA terra Workspace: "
         )

@@ -46,6 +46,10 @@ clinical data (default: "sample")}
 
 \item{verbose}{logical(1) Whether to output additional information regarding
 the workspace and namespace (default: \code{TRUE}).}
+
+\item{sampleIdx}{numeric() index or TRUE. Specify an index for subsetting the
+assay data. This argument is mainly used for example and vignette
+purposes. To use all the data, use the default value (default: \code{TRUE})}
 }
 \value{
 A \code{MultiAssayExperiment} object with n number of assays corresponding
@@ -57,15 +61,15 @@ documentation correspond to the TCGA_COAD_OpenAccess_V1 workspace that
 can be found on \url{app.terra.bio}.
 }
 \examples{
-
-terraTCGAdata(
-    clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
-    assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-    "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
-    workspace = "TCGA_COAD_OpenAcces_V1-0_DATA",
-    sampleCode = NULL,
-    sampleIdx = 1:4,
-    split = FALSE
-)
+if (AnVIL::gcloud_exists())
+  terraTCGAdata(
+      clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
+      assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+      "rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data"),
+      workspace = "TCGA_COAD_OpenAccess_V1-0_DATA",
+      sampleCode = NULL,
+      sampleIdx = 1:4,
+      split = FALSE
+  )
 
 }
