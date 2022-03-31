@@ -46,12 +46,12 @@ Either a matrix or RaggedExperiment depending on the assay selected
 Obtain assay datasets from Terra
 }
 \examples{
-
-getAssayData(
-    assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-    sampleCode = c("01", "10"),
-    workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
-)
+if (AnVIL::gcloud_exists())
+  getAssayData(
+      assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+      sampleCode = c("01", "10"),
+      workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
+  )
 
 }
 \seealso{

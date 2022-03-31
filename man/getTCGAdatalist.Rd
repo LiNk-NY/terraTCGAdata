@@ -35,6 +35,9 @@ clinical data (default: "sample")}
 \item{sampleIdx}{numeric() index or TRUE. Specify an index for subsetting the
 assay data. This argument is mainly used for example and vignette
 purposes. To use all the data, use the default value (default: \code{TRUE})}
+
+\item{verbose}{logical(1L) Whether to output additional details of the
+data facilitation.}
 }
 \value{
 A \code{list} of assay datasets
@@ -43,12 +46,12 @@ A \code{list} of assay datasets
 Import Terra TCGA data as a list
 }
 \examples{
-
-getTCGAdatalist(
-    assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
-    "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
-    sampleCode = c("01", "10"),
-    workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
-)
+if (AnVIL::gcloud_exists())
+  getTCGAdatalist(
+      assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
+      "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),
+      sampleCode = c("01", "10"),
+      workspace = "TCGA_COAD_OpenAccess_V1-0_DATA"
+  )
 
 }
