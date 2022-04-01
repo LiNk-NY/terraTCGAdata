@@ -14,7 +14,7 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 # terraTCGAdata
 
-## cBioPortal data and MultiAssayExperiment
+## Terra TCGA data and MultiAssayExperiment
 
 ### Overview
 
@@ -81,7 +81,7 @@ gcloud_exists()
 You can also use the `gcloud_project` to set a project name by specifying
 the project argument:
 
-```{r, eval=gcloud_exists()}
+```{r, eval=FALSE}
 gcloud_project()
 ```
 

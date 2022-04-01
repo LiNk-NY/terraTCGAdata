@@ -1,7 +1,7 @@
 
 # terraTCGAdata
 
-## cBioPortal data and MultiAssayExperiment
+## Terra TCGA data and MultiAssayExperiment
 
 ### Overview
 
@@ -73,7 +73,7 @@ specifying the project argument:
 
 ``` r
 gcloud_project()
-#> [1] "landmarkanvil2"
+#> [1] "project_name"
 ```
 
 # Default Data Workspace
