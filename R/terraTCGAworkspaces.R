@@ -49,7 +49,7 @@ terraTCGAworkspace <- function(projectName = NULL) {
 #' @export
 findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
     avs <- avworkspaces()
-    gdcind <- -grep("GDCDR", avs[["name"]])
+    gdcind <- grep("GDCDR", avs[["name"]], invert = TRUE)
     avs <- avs[gdcind, ]
     project_code <- paste(project, cancerCode, sep = "_")
     ind <- grep(project_code, avs[["name"]])
