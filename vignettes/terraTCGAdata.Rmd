@@ -26,8 +26,15 @@ BiocManager::install("LiNk-NY/terraTCGAdata")
 
 # Description
 
-Terra workspaces come pre-packaged with TCGA data. The challenge is to make
-use of the Terra data model and represent the data as `MultiAssayExperiment`.
+Some public Terra workspaces come pre-packaged with TCGA data (i.e., cloud data
+resources are linked within the data model). Particularly the workspaces that
+are labelled `OpenAccess_V1-0`. Datasets harmonized to the hg38 genome use a
+different data model / workflow and are not compatible with the functions in
+this package. For those that are, we make use of the Terra data model and
+represent the data as `MultiAssayExperiment`.
+
+For more information on `MultiAssayExperiment`, please see the vignette in
+that package.
 
 # Requirements
 
@@ -41,16 +48,17 @@ library(terraTCGAdata)
 ## gcloud sdk installation
 
 A valid GCloud SDK installation is required to use the package. Use the
-`gcloud_exists()` function to identify whether it is installed in your
-system.
+`gcloud_exists()` function from the `r Biocpkg("AnVIL")` package to identify
+whether it is installed in your system.
 
 ```{r}
 gcloud_exists()
 ```
 
-You can use the `gcloud_project` to set a project name:
+You can also use the `gcloud_project` to set a project name by specifying
+the project argument:
 
-```{r}
+```{r, eval=gcloud_exists()}
 gcloud_project()
 ```
 
@@ -64,7 +72,7 @@ findTCGAworkspaces()
 ```
 
 You can then set a package-wide option with the `terraTCGAworkspace` function
-and check the setting with the ``.
+and check the setting with the `getOption('terraTCGAdata.workspace')` option.
 
 ```{r,eval=gcloud_exists()}
 terraTCGAworkspace()
@@ -73,6 +81,10 @@ getOption("terraTCGAdata.workspace")
 
 # Clinical data resources
 
+In order to determine what datasets to download, use the `getClinicalTable`
+function to list all of the columns that correspond to clinical data
+from the different collection centers.
+
 ```{r, eval=gcloud_exists()}
 ct <- getClinicalTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 ct
@@ -80,6 +92,9 @@ names(ct)
 ```
 
 # Clinical data download
+
+After picking the column in the `getClinicalTable` output, use the column
+name as input to the `getClinical` function to obtain the data:
 
 ```{r, eval=gcloud_exists()}
 column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
@@ -94,16 +109,31 @@ dim(clin)
 
 # Assay data resources
 
+We use the same approach for assay data. We first produce a list of assays
+from the `getAssayTable` and then we select one along with any sample
+codes of interest.
+
 ```{r, eval=gcloud_exists()}
 at <- getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 at
 names(at)
 ```
 
-# Intermediate function for obtaining only the data
+# Summary of sample types in the data
+
+You can get a summary table of all the samples in the adata by using the
+`sampleTypesTable`:
 
 ```{r, eval=gcloud_exists()}
 sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
+```
+
+# Intermediate function for obtaining only the data
+
+Note that if you have the package-wide option set, the workspace argument
+is not needed in the function call.
+
+```{r, eval=gcloud_exists()}
 prot <- getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     sampleCode = c("01", "10"),
@@ -114,6 +144,9 @@ head(prot)
 ```
 
 # MultiAssayExperiment
+
+Finally, once you have collected all the relevant column names, 
+these can be inputs to the main `terraTCGAdata` function:
 
 ```{r, eval=gcloud_exists()}
 mae <- terraTCGAdata(
@@ -129,3 +162,6 @@ mae <- terraTCGAdata(
 mae
 ```
 
+We expect that most `OpenAccess_V1-0` cancer datasets follow this data model.
+If you encounter any errors, please provide a minimally reproducible example
+at https://github.com/waldronlab/terraTCGAdata.
