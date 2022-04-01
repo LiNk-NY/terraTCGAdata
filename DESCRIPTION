@@ -1,7 +1,7 @@
 Package: terraTCGAdata
 Type: Package
 Title: OpenAccess TCGA Data on Terra as MultiAssayExperiment
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: person(
     "Marcel", "Ramos", , "marcel.ramosperez@roswellpark.org",
     c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
@@ -11,7 +11,8 @@ Description: Leverage the existing open access TCGA data on Terra with
     data model without learning its complexities. With a few functions,
     you can copy / download and generate a MultiAssayExperiment from the
     TCGA example workspaces provided by Terra.
-Depends: AnVIL, MultiAssayExperiment
+Depends: R (>= 4.2.0), AnVIL, MultiAssayExperiment
+biocViews: Software, Infrastructure, DataImport
 Imports: 
   BiocFileCache,
   dplyr,
@@ -24,6 +25,13 @@ Imports:
   tidyr,
   TCGAutils,
   utils
+Suggests:
+  knitr,
+  rmarkdown,
+  BiocStyle
+URL: https://github.com/waldronlab/terraTCGAdata
+BugReports: https://github.com/waldronlab/terraTCGAdata/issues
+VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
 RoxygenNote: 7.1.2
