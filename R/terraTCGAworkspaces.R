@@ -7,7 +7,7 @@
 #' input. Use the `findTCGAworkspaces` function to list all of the available
 #' open access TCGA data workspaces.
 #'
-#' @details 
+#' @details
 #'     Note that GDC workspaces are not supported and are excluded
 #'     from the search results. GDC workspaces use a Terra workflow to download
 #'     TCGA data rather than providing Google Bucket storage locations for easy
@@ -36,7 +36,7 @@
 #'   findTCGAworkspaces()
 #'
 #' @export
-terraTCGAworkspace <- function(projectName = NULL) {
+terraTCGAworkspace <- function(projectName = "") {
     getOption(
         "terraTCGAdata.workspace",
         setTerraWorkspace(projectName = projectName)
@@ -60,13 +60,17 @@ setTerraWorkspace <-
     function(projectName, namespace = .DEFAULT_NAMESPACE)
 {
     ws <- getOption("terraTCGAdata.workspace")
-    if ((!nzchar(ws) || is.null(ws)) && missing(projectName)) {
-        tcga_choices <- findTCGAworkspaces()[["name"]]
-        wsi <- utils::menu(
-            tcga_choices,
-            title = "Select a TCGA terra Workspace: "
-        )
-        ws <- tcga_choices[wsi]
+    if ((!nzchar(ws) || is.null(ws)) && !nzchar(projectName)) {
+        if (!interactive()) {
+            ws <- ""
+        } else {
+            tcga_choices <- findTCGAworkspaces()[["name"]]
+            wsi <- utils::menu(
+                tcga_choices,
+                title = "Select a TCGA terra Workspace: "
+            )
+            ws <- tcga_choices[wsi]
+        }
         options("terraTCGAdata.workspace" = ws)
     } else if (!missing(projectName)) {
         .isSingleChar(projectName)

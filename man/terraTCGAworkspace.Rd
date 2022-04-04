@@ -5,7 +5,7 @@
 \alias{findTCGAworkspaces}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
-terraTCGAworkspace(projectName = NULL)
+terraTCGAworkspace(projectName = "")
 
 findTCGAworkspaces(project = "^TCGA", cancerCode = ".*")
 }

@@ -75,7 +75,7 @@ You can then set a package-wide option with the `terraTCGAworkspace` function
 and check the setting with the `getOption('terraTCGAdata.workspace')` option.
 
 ```{r,eval=gcloud_exists()}
-terraTCGAworkspace()
+terraTCGAworkspace("TCGA_COAD_OpenAccess_V1-0_DATA")
 getOption("terraTCGAdata.workspace")
 ```
 
