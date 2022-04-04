@@ -1,4 +1,5 @@
 .DEFAULT_TABLENAME <- "sample"
+.DEFAULT_NAMESPACE <- "broad-firecloud-tcga"
 
 #' Obtain a reference table for assay data in the Terra data model
 #'

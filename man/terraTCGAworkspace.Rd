@@ -5,7 +5,7 @@
 \alias{findTCGAworkspaces}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
-terraTCGAworkspace(projectName = "")
+terraTCGAworkspace(projectName = NULL)
 
 findTCGAworkspaces(project = "^TCGA", cancerCode = ".*")
 }
@@ -35,7 +35,9 @@ open access TCGA data workspaces.
 \preformatted{Note that GDC workspaces are not supported and are excluded
 from the search results. GDC workspaces use a Terra workflow to download
 TCGA data rather than providing Google Bucket storage locations for easy
-data retrieval.
+data retrieval. To reset the option, use
+`options('terraTCGAdata.workspace' = NULL)` and you will be prompted to
+select from a list of TCGA workspaces.
 }
 }
 \section{Functions}{

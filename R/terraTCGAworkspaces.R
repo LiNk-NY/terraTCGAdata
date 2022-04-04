@@ -1,4 +1,6 @@
-.DEFAULT_NAMESPACE <- "broad-firecloud-tcga"
+.isSingleChar <- function(ch) {
+    stopifnot(is.character(ch), !is.na(ch), identical(length(ch), 1L))
+}
 
 #' Obtain or set the Terra Workspace Project Dataset
 #'
@@ -11,7 +13,9 @@
 #'     Note that GDC workspaces are not supported and are excluded
 #'     from the search results. GDC workspaces use a Terra workflow to download
 #'     TCGA data rather than providing Google Bucket storage locations for easy
-#'     data retrieval.
+#'     data retrieval. To reset the option, use
+#'     `options('terraTCGAdata.workspace' = NULL)` and you will be prompted to
+#'     select from a list of TCGA workspaces.
 #'
 #' @aliases findTCGAworkspaces
 #'
@@ -36,11 +40,44 @@
 #'   findTCGAworkspaces()
 #'
 #' @export
-terraTCGAworkspace <- function(projectName = "") {
-    getOption(
+terraTCGAworkspace <-
+    function(projectName = NULL)
+{
+    opt <- getOption(
         "terraTCGAdata.workspace",
-        setTerraWorkspace(projectName = projectName)
+        .setTerraWorkspace(projectName = projectName)
     )
+    if (is.null(opt) || !nzchar(opt))
+        warning("'terraTCGAdata.workspace' is blank; see '?terraTCGAworkspace'")
+    opt
+}
+
+.setTerraWorkspace <-
+    function(projectName)
+{
+    ws <- getOption("terraTCGAdata.workspace")
+    if (is.null(projectName) || !nzchar(projectName)) {
+        if (interactive()) {
+            tcga_choices <- findTCGAworkspaces()[["name"]]
+            wsi <- utils::menu(
+                tcga_choices,
+                title = "Select a TCGA terra Workspace: "
+            )
+            ws <- tcga_choices[wsi]
+            options("terraTCGAdata.workspace" = ws)
+        }
+    } else if (!is.null(projectName)) {
+        .isSingleChar(projectName)
+        tcga_choices <- findTCGAworkspaces()[["name"]]
+        validPC <- projectName %in% tcga_choices
+        if (!validPC)
+            stop("'projectName' not in the 'findTCGAworkspaces()' list ")
+        if (!identical(ws, projectName) && !is.null(ws))
+            warning("Replacing 'terraTCGAData.workspace' with ", projectName)
+        ws <- projectName
+        options("terraTCGAdata.workspace" = ws)
+    }
+    ws 
 }
 
 #' @describeIn terraTCGAworkspace Function to enumerate the available TCGA data
@@ -54,38 +91,4 @@ findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
     project_code <- paste(project, cancerCode, sep = "_")
     ind <- grep(project_code, avs[["name"]])
     avs[ind, ]
-}
-
-setTerraWorkspace <-
-    function(projectName, namespace = .DEFAULT_NAMESPACE)
-{
-    ws <- getOption("terraTCGAdata.workspace")
-    if ((!nzchar(ws) || is.null(ws)) && !nzchar(projectName)) {
-        if (!interactive()) {
-            ws <- ""
-        } else {
-            tcga_choices <- findTCGAworkspaces()[["name"]]
-            wsi <- utils::menu(
-                tcga_choices,
-                title = "Select a TCGA terra Workspace: "
-            )
-            ws <- tcga_choices[wsi]
-        }
-        options("terraTCGAdata.workspace" = ws)
-    } else if (!missing(projectName)) {
-        .isSingleChar(projectName)
-        tcga_choices <- findTCGAworkspaces()[["name"]]
-        validPC <- projectName %in% tcga_choices
-        if (!validPC)
-            stop("'projectName' not in the 'findTCGAworkspaces()' list ")
-        if (!identical(ws, projectName))
-            warning("Replacing 'terraTCGAData.workspace' with ", projectName)
-        ws <- projectName
-        options("terraTCGAdata.workspace" = ws)
-    }
-    ws
-}
-
-.isSingleChar <- function(ch) {
-    stopifnot(is.character(ch), !is.na(ch), identical(length(ch), 1L))
 }
