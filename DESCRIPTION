@@ -29,6 +29,7 @@ Suggests:
   knitr,
   rmarkdown,
   BiocStyle,
+  withr,
   testthat (>= 3.0.0)
 URL: https://github.com/waldronlab/terraTCGAdata
 BugReports: https://github.com/waldronlab/terraTCGAdata/issues
