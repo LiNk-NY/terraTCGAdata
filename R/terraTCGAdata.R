@@ -169,10 +169,9 @@ getTCGAdatalist <-
         sampleIdx = TRUE, verbose = TRUE 
     )
 {
+    nwspace <- paste0(namespace, "/", workspace)
     if (verbose)
-        message(
-            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
-        )
+        message("Using namespace/workspace: ", nwspace)
     dlist <- structure(vector("list", length(assayNames)), .Names = assayNames)
     for (assay in assayNames) {
         dlist[[assay]] <-
@@ -233,10 +232,9 @@ terraTCGAdata <-
         tablename = .DEFAULT_TABLENAME, verbose = TRUE, sampleIdx = TRUE
     )
 {
+    nwspace <- paste0(namespace, "/", workspace)
     if (verbose)
-        message(
-            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
-        )
+        message("Using namespace/workspace: ", nwspace)
     datalist <- getTCGAdatalist(
         assayNames = assays, sampleCode = sampleCode, workspace = workspace,
         namespace = namespace, tablename = tablename, sampleIdx = sampleIdx,

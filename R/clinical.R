@@ -29,10 +29,9 @@ getClinicalTable <-
         verbose = TRUE
     )
 {
+    nwspace <- paste0(namespace, "/", workspace)
     if (verbose)
-        message(
-            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
-        )
+        message("Using namespace/workspace: ", nwspace)
     .isGDC(workspace)
     
     avtab <- avtable(
@@ -169,10 +168,9 @@ sampleTypesTable <-
         verbose = TRUE
     )
 {
+    nwspace <- paste0(namespace, "/", workspace)
     if (verbose)
-        message(
-            "Using namespace/workspace: ", paste0(namespace, "/", workspace)
-        )
+        message("Using namespace/workspace: ", nwspace)
     avtab <- avtable(tablename, namespace = namespace, name = workspace)
     stable <- table(avtab[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
