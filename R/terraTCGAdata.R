@@ -78,7 +78,9 @@ getAssayData <-
     assayfiles <- unlist(unique(assaylinks))
     if (length(assayfiles[sampleIdx]) > 800)
         assayfiles <- split(
-            assayfiles, cut(seq_along(assayfiles), 3, labels = letters[1:3])
+            assayfiles,
+            cut(seq_along(assayfiles), 3,
+            labels = utils::head(letters, 3))
         )
 
     bfc <- BiocFileCache::BiocFileCache()
