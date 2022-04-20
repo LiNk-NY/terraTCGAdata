@@ -30,7 +30,7 @@ test_that("terraTCGAworkspace works", {
         )
     )
     
-    skip_if_not(gcloud_exists()) 
+    skip_if_not(AnVIL::gcloud_exists()) 
     expect_error(
         terraTCGAworkspace("ABDC")
     )
