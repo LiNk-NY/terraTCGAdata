@@ -43,49 +43,76 @@
 terraTCGAworkspace <-
     function(projectName = NULL)
 {
-    opt <- getOption(
-        "terraTCGAdata.workspace",
-        .setTerraWorkspace(projectName = projectName)
-    )
+    opt <- getOption("terraTCGAdata.workspace")
+    if (!is.null(projectName))
+        .validateWorkspace(projectName = projectName)
+    if (!missing(projectName))
+        opt <- .setTerraWorkspace(projectName = projectName)
     if (is.null(opt) || !nzchar(opt))
         warning("'terraTCGAdata.workspace' is blank; see '?terraTCGAworkspace'")
     opt
+}
+
+.validateWorkspace <- 
+    function(projectName)
+{
+    ws <- getOption("terraTCGAdata.workspace")
+    .isSingleChar(projectName)
+    tcga_choices <- findTCGAworkspaces()[["name"]]
+    validPC <- projectName %in% tcga_choices
+    if (!validPC)
+        stop("'projectName' not in the 'findTCGAworkspaces()' list ")
+    if (!identical(ws, projectName) && !is.null(ws)) {
+        warning(
+            "'terraTCGAData.workspace' option set to ",
+            sQuote(projectName, q = FALSE),
+            " from ",
+            sQuote(ws, q = FALSE),
+            call. = FALSE
+        )
+        ws <- projectName
+        options("terraTCGAdata.workspace" = projectName)
+    }
+    ws
+}
+
+.done_fun <- function(avs, row_selected) {
+    unname(unlist(avs[row_selected, "name"]))
 }
 
 .setTerraWorkspace <-
     function(projectName)
 {
     ws <- getOption("terraTCGAdata.workspace")
+    if (identical(ws, projectName) && !is.null(projectName))
+        return(ws)
     if (is.null(projectName) || !nzchar(projectName)) {
         if (interactive()) {
-            tcga_choices <- findTCGAworkspaces()[["name"]]
-            wsi <- utils::menu(
-                tcga_choices,
-                title = "Select a TCGA terra Workspace: "
+            ws <- AnVIL::.gadget_run(
+                "Terra TCGA Workspaces", findTCGAworkspaces(), .done_fun
             )
-            ws <- tcga_choices[wsi]
             options("terraTCGAdata.workspace" = ws)
         }
-    } else if (!is.null(projectName)) {
-        .isSingleChar(projectName)
-        tcga_choices <- findTCGAworkspaces()[["name"]]
-        validPC <- projectName %in% tcga_choices
-        if (!validPC)
-            stop("'projectName' not in the 'findTCGAworkspaces()' list ")
-        if (!identical(ws, projectName) && !is.null(ws))
-            warning("Replacing 'terraTCGAData.workspace' with ", projectName)
-        ws <- projectName
-        options("terraTCGAdata.workspace" = ws)
-    }
+    } 
     ws 
 }
+
+## from AnVIL:::.workspaces()
+.workspaces <- local({
+    workspaces <- NULL
+    function() {
+        if (is.null(workspaces))
+            workspaces <<- avworkspaces()
+        workspaces
+    }
+})
 
 #' @describeIn terraTCGAworkspace Function to enumerate the available TCGA data
 #'     workspaces in Terra
 #'
 #' @export
 findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
-    avs <- avworkspaces()
+    avs <- .workspaces()
     gdcind <- grep("GDCDR", avs[["name"]], invert = TRUE)
     avs <- avs[gdcind, ]
     project_code <- paste(project, cancerCode, sep = "_")
