@@ -172,7 +172,7 @@ sampleTypesTable <-
     if (verbose)
         message("Using namespace/workspace: ", nwspace)
     avtab <- avtable(tablename, namespace = namespace, name = workspace)
-    stable <- table(avtab[["sample_type"]])
+    stable <- base::table(avtab[["sample_type"]])
     dataenv <- new.env(parent = emptyenv())
     utils::data("sampleTypes", envir = dataenv, package = "TCGAutils")
     stypes <- dataenv[["sampleTypes"]]
