@@ -5,17 +5,18 @@
 #' Obtain or set the Terra Workspace Project Dataset
 #'
 #' Terra allows access to about 71 open access TCGA datasets. A dataset
-#' workspace can be set using the `terraTCGAworkspace` function with a `projectName`
-#' input. Use the `findTCGAworkspaces` function to list all of the available
-#' open access TCGA data workspaces.
+#' workspace can be set using the `terraTCGAworkspace` function with a
+#' `projectName` input. Use the `findTCGAworkspaces` function to list all
+#' of the available open access TCGA data workspaces.
 #'
 #' @details
 #'   Note that GDC workspaces are not supported and are excluded
 #'   from the search results. GDC workspaces use a Terra workflow to download
 #'   TCGA data rather than providing Google Bucket storage locations for easy
-#'   data retrieval. To reset the option, use
-#'   `options('terraTCGAdata.workspace' = NULL)` and you will be prompted to
-#'   select from a list of TCGA workspaces.
+#'   data retrieval. To reset the `terraTCGAworkspace`, use
+#'   `terraTCGAworkspace(NULL)` and you will be prompted to select from a list
+#'   of TCGA workspaces. You may also check the current active workspace by
+#'   running `terraTCGAworkspace()` without any inputs.
 #'
 #' @aliases findTCGAworkspaces
 #'
