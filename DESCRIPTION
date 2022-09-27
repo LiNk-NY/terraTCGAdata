@@ -36,5 +36,5 @@ BugReports: https://github.com/waldronlab/terraTCGAdata/issues
 VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Config/testthat/edition: 3

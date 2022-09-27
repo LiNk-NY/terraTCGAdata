@@ -42,10 +42,10 @@ running \code{terraTCGAworkspace()} without any inputs.
 }
 \section{Functions}{
 \itemize{
-\item \code{findTCGAworkspaces}: Function to enumerate the available TCGA data
+\item \code{findTCGAworkspaces()}: Function to enumerate the available TCGA data
 workspaces in Terra
-}}
 
+}}
 \examples{
 if (AnVIL::gcloud_exists())
   findTCGAworkspaces()
