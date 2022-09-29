@@ -16,7 +16,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
-# Installation
+# terraTCGAData
+
+## Installation
 
 ```{r,eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
