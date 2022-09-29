@@ -3,13 +3,15 @@
 \name{terraTCGAworkspace}
 \alias{terraTCGAworkspace}
 \alias{selectTCGAworkspace}
+\alias{findTCGAworkspaces}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
 terraTCGAworkspace(projectName = getOption("terraTCGAdata.workspace", NULL))
 
 selectTCGAworkspace(
   projectName = getOption("terraTCGAdata.workspace", NULL),
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -19,6 +21,9 @@ interactively select from a table of project codes.}
 
 \item{verbose}{logical(1) Whether to provide more informative messages
 when an the "terraTCGAdata.workspace" option is set.}
+
+\item{...}{further arguments passed down to lower level functions, not
+intended for the end user.}
 }
 \value{
 A Terra TCGA Workspace name

@@ -18,7 +18,7 @@
 #'   of TCGA workspaces. You may also check the current active workspace by
 #'   running `terraTCGAworkspace()` without any inputs.
 #'
-#' @aliases selectTCGAworkspace
+#' @aliases selectTCGAworkspace findTCGAworkspaces
 #'
 #' @param projectName character(1) A project code usually in the form of
 #'   `TCGA_CODE_OpenAccess_V1-0_DATA`. See `selectTCGAworkspace` to
@@ -26,6 +26,9 @@
 #'
 #' @param verbose logical(1) Whether to provide more informative messages
 #'   when an the "terraTCGAdata.workspace" option is set.
+#'
+#' @param ... further arguments passed down to lower level functions, not
+#'   intended for the end user.
 #'
 #' @return A Terra TCGA Workspace name
 #'
@@ -110,6 +113,12 @@ terraTCGAworkspace <-
     avs[ind, ]
 }
 
+#' @export
+findTCGAworkspaces <- function(...) {
+    .Deprecated("selectTCGAworkspace")
+    selectTCGAworkspace(...)
+}
+
 #' @describeIn terraTCGAworkspace Function to interactively select from the
 #'   available TCGA data workspaces in Terra. The `projectName` argument and
 #'   'terraTCGAdata.workspace' option must be `NULL` to enable the interactive
@@ -117,9 +126,9 @@ terraTCGAworkspace <-
 #'
 #' @export
 selectTCGAworkspace <- function(
-    projectName = getOption("terraTCGAdata.workspace", NULL), verbose = FALSE
+    projectName = getOption("terraTCGAdata.workspace", NULL), verbose = FALSE, ...
 ) {
-    wst <- .getWorkspaceTable()
+    wst <- .getWorkspaceTable(...)
     if (interactive() && is.null(projectName)) {
         ws <- AnVIL::.gadget_run(
             "Terra TCGA Workspaces", wst, .done_fun
