@@ -16,23 +16,40 @@ output:
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
-# Installation (development version)
+# Installation
 
 ```{r,eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("LiNk-NY/terraTCGAdata")
+BiocManager::install("terraTCGAdata")
 ```
 
-# Description
+# Overview
+ 
+The `terraTCGAdata` R package aims to import TCGA datasets, as
+[MultiAssayExperiment](http://bioconductor.org/packages/MultiAssayExperiment/),
+available on the Terra platform. The package provides a set of
+functions that allow the discovery of relevant datasets. It provides
+one main function and two helper functions:
+ 
+1.  `terraTCGAdata` allows the creation of the `MultiAssayExperiment` object
+    from the different indicated resources.
+ 
+2.  The `getClinicalTable` and `getAssayTable` functions allow for the
+    discovery of datasets within the Terra data model. The column names
+    from these tables can be provided as inputs to the `terraTCGAdata`
+    function.
+
+## Data
 
 Some public Terra workspaces come pre-packaged with TCGA data (i.e., cloud data
 resources are linked within the data model). Particularly the workspaces that
-are labelled `OpenAccess_V1-0`. Datasets harmonized to the hg38 genome use a
-different data model / workflow and are not compatible with the functions in
-this package. For those that are, we make use of the Terra data model and
-represent the data as `MultiAssayExperiment`.
+are labelled `OpenAccess_V1-0`. Datasets harmonized to the hg38 genome, such as
+those from the Genomic Data Commons data repository, use a different data model
+/ workflow and are not compatible with the functions in this package. For those
+that are, we make use of the Terra data model and represent the data as
+`MultiAssayExperiment`.
 
 For more information on `MultiAssayExperiment`, please see the vignette in
 that package.
@@ -48,9 +65,10 @@ library(terraTCGAdata)
 
 ## gcloud sdk installation
 
-A valid GCloud SDK installation is required to use the package. Use the
-`gcloud_exists()` function from the `r Biocpkg("AnVIL")` package to identify
-whether it is installed in your system.
+A valid GCloud SDK installation is required to use the package. To get set up,
+see the Bioconductor tutorials for running RStudio on Terra. Use the
+`gcloud_exists()` function from the `r BiocStyle::Biocpkg("AnVIL")` package to
+identify whether it is installed in your system.
 
 ```{r}
 gcloud_exists()
@@ -65,15 +83,16 @@ gcloud_project()
 
 # Default Data Workspace
 
-To get a list of available TCGA workspaces, use the `findTCGAworkspaces()`
+To get a table of available TCGA workspaces, use the `selectTCGAworkspace()`
 function: 
 
 ```{r, eval=AnVIL::gcloud_exists()}
-findTCGAworkspaces()
+selectTCGAworkspace()
 ```
 
-You can then set a package-wide option with the `terraTCGAworkspace` function
-and check the setting with the `getOption('terraTCGAdata.workspace')` option.
+You can also set the package-wide option with the `terraTCGAworkspace` function
+and check the setting with `getOption('terraTCGAdata.workspace')` or by running
+`terraTCGAworkspace` function.
 
 ```{r,eval=AnVIL::gcloud_exists()}
 terraTCGAworkspace("TCGA_COAD_OpenAccess_V1-0_DATA")

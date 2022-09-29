@@ -6,8 +6,8 @@
 #'
 #' Terra allows access to about 71 open access TCGA datasets. A dataset
 #' workspace can be set using the `terraTCGAworkspace` function with a
-#' `projectName` input. Use the `findTCGAworkspaces` function to list all
-#' of the available open access TCGA data workspaces.
+#' `projectName` input. Use the `selectTCGAworkspace` function to select
+#' a TCGA data workspace from an interactive table.
 #'
 #' @details
 #'   Note that GDC workspaces are not supported and are excluded
@@ -18,37 +18,33 @@
 #'   of TCGA workspaces. You may also check the current active workspace by
 #'   running `terraTCGAworkspace()` without any inputs.
 #'
-#' @aliases findTCGAworkspaces
+#' @aliases selectTCGAworkspace
 #'
 #' @param projectName character(1) A project code usually in the form of
-#' `TCGA_CODE_OpenAccess_V1-0_DATA`. See `findTCGAworkspaces` for a list of
-#' project codes.
+#'   `TCGA_CODE_OpenAccess_V1-0_DATA`. See `selectTCGAworkspace` to
+#'   interactively select from a table of project codes.
 #'
-#' @param project character(1) A prefix for the regex search across all public
-#' projects on the terra platform (default: `"^TCGA"`). Usually, this does not
-#' change.
-#'
-#' @param cancerCode character(1) Corresponds to the TCGA cancer code (e.g,
-#'   "ACC" for AdrenoCortical Carcinoma) of interest. The default value of
-#'   (`.*`) provides all available cancer datasets.
+#' @param verbose logical(1) Whether to provide more informative messages
+#'   when an the "terraTCGAdata.workspace" option is set.
 #'
 #' @return A Terra TCGA Workspace name
 #'
 #' @md
 #'
 #' @examples
-#' if (AnVIL::gcloud_exists())
-#'   findTCGAworkspaces()
+#' if (AnVIL::gcloud_exists() && interactive())
+#'   selectTCGAworkspace()
+#' 
+#' terraTCGAworkspace()
 #'
 #' @export
 terraTCGAworkspace <-
-    function(projectName = NULL)
+    function(projectName = getOption("terraTCGAdata.workspace", NULL))
 {
-    opt <- getOption("terraTCGAdata.workspace")
     if (!is.null(projectName))
-        .validateWorkspace(projectName = projectName)
-    if (!missing(projectName))
-        opt <- .setTerraWorkspace(projectName = projectName)
+        opt <- .validateWorkspace(projectName = projectName)
+    else
+        opt <- selectTCGAworkspace(projectName = projectName)
     if (is.null(opt) || !nzchar(opt))
         warning("'terraTCGAdata.workspace' is blank; see '?terraTCGAworkspace'")
     opt
@@ -57,12 +53,12 @@ terraTCGAworkspace <-
 .validateWorkspace <- 
     function(projectName)
 {
-    ws <- getOption("terraTCGAdata.workspace")
     .isSingleChar(projectName)
-    tcga_choices <- findTCGAworkspaces()[["name"]]
+    tcga_choices <- .getWorkspaceTable()[["name"]]
     validPC <- projectName %in% tcga_choices
     if (!validPC)
-        stop("'projectName' not in the 'findTCGAworkspaces()' list ")
+        stop("'projectName' not in the 'selectTCGAworkspace()' table ")
+    ws <- getOption("terraTCGAdata.workspace", NULL)
     if (!identical(ws, projectName) && !is.null(ws)) {
         warning(
             "'terraTCGAData.workspace' option set to ",
@@ -81,23 +77,6 @@ terraTCGAworkspace <-
     unname(unlist(avs[row_selected, "name"]))
 }
 
-.setTerraWorkspace <-
-    function(projectName)
-{
-    ws <- getOption("terraTCGAdata.workspace")
-    if (identical(ws, projectName) && !is.null(projectName))
-        return(ws)
-    if (is.null(projectName) || !nzchar(projectName)) {
-        if (interactive()) {
-            ws <- AnVIL::.gadget_run(
-                "Terra TCGA Workspaces", findTCGAworkspaces(), .done_fun
-            )
-            options("terraTCGAdata.workspace" = ws)
-        }
-    } 
-    ws 
-}
-
 ## from AnVIL:::.workspaces()
 .workspaces <- local({
     workspaces <- NULL
@@ -108,15 +87,48 @@ terraTCGAworkspace <-
     }
 })
 
-#' @describeIn terraTCGAworkspace Function to enumerate the available TCGA data
-#'     workspaces in Terra
+#' Obtain the table of datasets from the Terra platform
+#' 
+#' The datasets include all TCGA datasets that do not come from the Genomic
+#' Data Commons Data Repository because those data use a different data model.
+#' 
+#' @param project character(1) A prefix for the regex search across all public
+#' projects on the terra platform (default: `"^TCGA"`). Usually, this does not
+#' change.
 #'
-#' @export
-findTCGAworkspaces <- function(project = "^TCGA", cancerCode = ".*") {
+#' @param cancerCode character(1) Corresponds to the TCGA cancer code (e.g,
+#'   "ACC" for AdrenoCortical Carcinoma) of interest. The default value of
+#'   (`.*`) provides all available cancer datasets.
+#'
+#' @keywords internal
+.getWorkspaceTable <- function(project = "^TCGA", cancerCode = ".*") {
     avs <- .workspaces()
     gdcind <- grep("GDCDR", avs[["name"]], invert = TRUE)
     avs <- avs[gdcind, ]
-    project_code <- paste(project, cancerCode, sep = "_")
+    project_code <- paste(project = project, cancerCode = cancerCode, sep = "_")
     ind <- grep(project_code, avs[["name"]])
     avs[ind, ]
+}
+
+#' @describeIn terraTCGAworkspace Function to interactively select from the
+#'   available TCGA data workspaces in Terra. The `projectName` argument and
+#'   'terraTCGAdata.workspace' option must be `NULL` to enable the interactive
+#'   gadget.
+#'
+#' @export
+selectTCGAworkspace <- function(
+    projectName = getOption("terraTCGAdata.workspace", NULL), verbose = FALSE
+) {
+    wst <- .getWorkspaceTable()
+    if (interactive() && is.null(projectName)) {
+        ws <- AnVIL::.gadget_run(
+            "Terra TCGA Workspaces", wst, .done_fun
+        )
+        if (verbose)
+            message("Setting 'terraTCGAdata.workspace' option to ", ws)
+    } else {
+        ws <- projectName    
+    }
+    options("terraTCGAdata.workspace" = ws)
+    ws
 }

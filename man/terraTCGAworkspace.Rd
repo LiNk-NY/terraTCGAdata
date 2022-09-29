@@ -2,25 +2,23 @@
 % Please edit documentation in R/terraTCGAworkspaces.R
 \name{terraTCGAworkspace}
 \alias{terraTCGAworkspace}
-\alias{findTCGAworkspaces}
+\alias{selectTCGAworkspace}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
-terraTCGAworkspace(projectName = NULL)
+terraTCGAworkspace(projectName = getOption("terraTCGAdata.workspace", NULL))
 
-findTCGAworkspaces(project = "^TCGA", cancerCode = ".*")
+selectTCGAworkspace(
+  projectName = getOption("terraTCGAdata.workspace", NULL),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{projectName}{character(1) A project code usually in the form of
-\verb{TCGA_CODE_OpenAccess_V1-0_DATA}. See \code{findTCGAworkspaces} for a list of
-project codes.}
+\verb{TCGA_CODE_OpenAccess_V1-0_DATA}. See \code{selectTCGAworkspace} to
+interactively select from a table of project codes.}
 
-\item{project}{character(1) A prefix for the regex search across all public
-projects on the terra platform (default: \code{"^TCGA"}). Usually, this does not
-change.}
-
-\item{cancerCode}{character(1) Corresponds to the TCGA cancer code (e.g,
-"ACC" for AdrenoCortical Carcinoma) of interest. The default value of
-(\verb{.*}) provides all available cancer datasets.}
+\item{verbose}{logical(1) Whether to provide more informative messages
+when an the "terraTCGAdata.workspace" option is set.}
 }
 \value{
 A Terra TCGA Workspace name
@@ -28,8 +26,8 @@ A Terra TCGA Workspace name
 \description{
 Terra allows access to about 71 open access TCGA datasets. A dataset
 workspace can be set using the \code{terraTCGAworkspace} function with a
-\code{projectName} input. Use the \code{findTCGAworkspaces} function to list all
-of the available open access TCGA data workspaces.
+\code{projectName} input. Use the \code{selectTCGAworkspace} function to select
+a TCGA data workspace from an interactive table.
 }
 \details{
 Note that GDC workspaces are not supported and are excluded
@@ -42,12 +40,16 @@ running \code{terraTCGAworkspace()} without any inputs.
 }
 \section{Functions}{
 \itemize{
-\item \code{findTCGAworkspaces()}: Function to enumerate the available TCGA data
-workspaces in Terra
+\item \code{selectTCGAworkspace()}: Function to interactively select from the
+available TCGA data workspaces in Terra. The `projectName` argument and
+'terraTCGAdata.workspace' option must be `NULL` to enable the interactive
+gadget.
 
 }}
 \examples{
-if (AnVIL::gcloud_exists())
-  findTCGAworkspaces()
+if (AnVIL::gcloud_exists() && interactive())
+  selectTCGAworkspace()
+
+terraTCGAworkspace()
 
 }
