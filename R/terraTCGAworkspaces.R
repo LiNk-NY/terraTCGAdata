@@ -35,10 +35,10 @@
 #' @md
 #'
 #' @examples
-#' if (AnVIL::gcloud_exists() && interactive())
+#' if (AnVIL::gcloud_exists() && interactive()) {
 #'   selectTCGAworkspace()
-#' 
-#' terraTCGAworkspace()
+#'   terraTCGAworkspace()
+#' }
 #'
 #' @export
 terraTCGAworkspace <-
