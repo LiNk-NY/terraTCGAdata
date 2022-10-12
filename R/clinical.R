@@ -33,14 +33,14 @@ getClinicalTable <-
     if (verbose)
         message("Using namespace/workspace: ", nwspace)
     .isGDC(workspace)
-    
+
     avtab <- avtable(
         tablename, namespace = namespace, name = workspace
     )
-    
+
     metadata <- avtab[, names(avtab) %in% metacols]
     avtab <- avtab[, !names(avtab) %in% metacols]
-        
+
     avtab[, grep("clin", names(avtab))]
 }
 
@@ -71,7 +71,7 @@ getClinicalTable <-
 #'
 #' @param metacols The set of columns that comprise of the metadata columns.
 #'     See the `.PARTICIPANT_METADATA_COLS` global variable
-#' 
+#'
 #' @param participantIds character() TCGA participant identifiers usually in the
 #'     form of "TCGA-AB-1234". By default, all available participant identifiers
 #'     will be used. (default: `NULL`)
@@ -114,7 +114,7 @@ getClinical <-
         clinfiles <- clinfiles[clindex]
     }
     participantIds <- gsub(".clin.txt", "", basename(clinfiles), fixed = TRUE)
-    
+
     bfc <- BiocFileCache::BiocFileCache()
     rpath <- BiocFileCache::bfcquery(bfc, columnName, exact = TRUE)[["rpath"]]
     if (!length(rpath)) {
