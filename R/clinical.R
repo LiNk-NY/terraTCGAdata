@@ -87,8 +87,8 @@ getClinicalTable <-
 #' if (AnVIL::gcloud_exists())
 #'   getClinical(
 #'       workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
-#'       participantIds = c("TCGA-3L-AA1B", "TCGA-4N-A93T",
-#'           "TCGA-4T-AA8H", "TCGA-5M-AAT5")
+#'       participantIds = c("TCGA-OR-A5J1", "TCGA-OR-A5J2",
+#'           "TCGA-OR-A5J3", "TCGA-OR-A5J4")
 #'   )
 #'
 getClinical <-
