@@ -109,6 +109,8 @@ getClinical <-
     if (!is.null(participantIds)) {
         clindex <-
             gsub(".clin.txt", "", basename(clinfiles)) %in% participantIds
+        if (!any(clindex))
+            stop("'participantIds' not found in clincal files")
         clinfiles <- clinfiles[clindex]
     }
     participantIds <- gsub(".clin.txt", "", basename(clinfiles), fixed = TRUE)
