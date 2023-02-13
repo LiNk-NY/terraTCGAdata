@@ -18,7 +18,7 @@
 #'   of TCGA workspaces. You may also check the current active workspace by
 #'   running `terraTCGAworkspace()` without any inputs.
 #'
-#' @aliases selectTCGAworkspace findTCGAworkspaces
+#' @aliases selectTCGAworkspace
 #'
 #' @param projectName character(1) A project code usually in the form of
 #'   `TCGA_CODE_OpenAccess_V1-0_DATA`. See `selectTCGAworkspace` to
@@ -111,12 +111,6 @@ terraTCGAworkspace <-
     project_code <- paste(project = project, cancerCode = cancerCode, sep = "_")
     ind <- grep(project_code, avs[["name"]])
     avs[ind, ]
-}
-
-#' @export
-findTCGAworkspaces <- function(...) {
-    .Deprecated("selectTCGAworkspace")
-    selectTCGAworkspace(...)
 }
 
 #' @describeIn terraTCGAworkspace Function to interactively select from the

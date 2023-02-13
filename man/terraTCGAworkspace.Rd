@@ -3,7 +3,6 @@
 \name{terraTCGAworkspace}
 \alias{terraTCGAworkspace}
 \alias{selectTCGAworkspace}
-\alias{findTCGAworkspaces}
 \title{Obtain or set the Terra Workspace Project Dataset}
 \usage{
 terraTCGAworkspace(projectName = getOption("terraTCGAdata.workspace", NULL))
