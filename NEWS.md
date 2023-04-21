@@ -1,3 +1,9 @@
+## Changes in version 1.4.0
+
+### New features
+
+* `findTCGAworkspaces` is defunct. Use `selectTCGAworkspace` instead.
+
 ## Changes in version 1.2.0
 
 ### New features
