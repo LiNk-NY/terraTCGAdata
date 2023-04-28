@@ -1,3 +1,9 @@
+## Changes in version 1.6.0
+
+### New features
+
+* `findTCGAworkspaces` has been removed from the package.
+
 ## Changes in version 1.4.0
 
 ### New features
