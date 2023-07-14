@@ -21,6 +21,13 @@ NULL
 #' @return A tibble of Google Storage resource locations e.g.,
 #'     `gs://firecloud...`
 #'
+#' @examples
+#' 
+#' if (AnVIL::gcloud_exists())
+#'     getClinicalTable(
+#'         workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
+#'     )
+#' 
 #' @export
 getClinicalTable <-
     function(

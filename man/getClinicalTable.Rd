@@ -37,3 +37,11 @@ A tibble of Google Storage resource locations e.g.,
 The column names in the output table can be used in the \code{getClinical}
 function.
 }
+\examples{
+
+if (AnVIL::gcloud_exists())
+    getClinicalTable(
+        workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
+    )
+
+}
