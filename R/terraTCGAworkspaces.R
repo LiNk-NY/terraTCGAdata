@@ -104,6 +104,9 @@ terraTCGAworkspace <-
 #'   (`.*`) provides all available cancer datasets.
 #'
 #' @keywords internal
+#' 
+#' @return A `tibble` `data.frame` that match the project in put; by default,
+#'   TCGA workspaces.
 .getWorkspaceTable <- function(project = "^TCGA", cancerCode = ".*") {
     avs <- .workspaces()
     gdcind <- grep("GDCDR", avs[["name"]], invert = TRUE)

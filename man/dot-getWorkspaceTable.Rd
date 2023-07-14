@@ -15,6 +15,10 @@ change.}
 "ACC" for AdrenoCortical Carcinoma) of interest. The default value of
 (`.*`) provides all available cancer datasets.}
 }
+\value{
+A `tibble` `data.frame` that match the project in put; by default,
+  TCGA workspaces.
+}
 \description{
 The datasets include all TCGA datasets that do not come from the Genomic
 Data Commons Data Repository because those data use a different data model.
