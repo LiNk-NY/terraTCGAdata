@@ -14,6 +14,10 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+isAnVILWS <- function() {
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP")
+}
 ```
 
 # terraTCGAData
@@ -79,7 +83,7 @@ gcloud_exists()
 You can also use the `gcloud_project` to set a project name by specifying
 the project argument:
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 gcloud_project()
 ```
 
@@ -88,7 +92,7 @@ gcloud_project()
 To get a table of available TCGA workspaces, use the `selectTCGAworkspace()`
 function: 
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 selectTCGAworkspace()
 ```
 
@@ -96,7 +100,7 @@ You can also set the package-wide option with the `terraTCGAworkspace` function
 and check the setting with `getOption('terraTCGAdata.workspace')` or by running
 `terraTCGAworkspace` function.
 
-```{r,eval=AnVIL::gcloud_exists()}
+```{r,eval=isAnVILWS()}
 terraTCGAworkspace("TCGA_COAD_OpenAccess_V1-0_DATA")
 getOption("terraTCGAdata.workspace")
 ```
@@ -107,7 +111,7 @@ In order to determine what datasets to download, use the `getClinicalTable`
 function to list all of the columns that correspond to clinical data
 from the different collection centers.
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 ct <- getClinicalTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 ct
 names(ct)
@@ -118,7 +122,7 @@ names(ct)
 After picking the column in the `getClinicalTable` output, use the column
 name as input to the `getClinical` function to obtain the data:
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 column_name <- "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin"
 clin <- getClinical(
     columnName = column_name,
@@ -135,7 +139,7 @@ We use the same approach for assay data. We first produce a list of assays
 from the `getAssayTable` and then we select one along with any sample
 codes of interest.
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 at <- getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 at
 names(at)
@@ -146,7 +150,7 @@ names(at)
 You can get a summary table of all the samples in the adata by using the
 `sampleTypesTable`:
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 ```
 
@@ -155,7 +159,7 @@ sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 Note that if you have the package-wide option set, the workspace argument
 is not needed in the function call.
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 prot <- getAssayData(
     assayName = "protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
     sampleCode = c("01", "10"),
@@ -170,7 +174,7 @@ head(prot)
 Finally, once you have collected all the relevant column names, 
 these can be inputs to the main `terraTCGAdata` function:
 
-```{r, eval=AnVIL::gcloud_exists()}
+```{r, eval=isAnVILWS()}
 mae <- terraTCGAdata(
     clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
     assays =
