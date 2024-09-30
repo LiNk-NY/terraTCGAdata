@@ -97,9 +97,9 @@ getAssayData <-
         rpath <- BiocFileCache::bfcnew(bfc, rname = assayName, rtype = "local")
         dir.create(rpath)
         if (is.list(assayfiles))
-            lapply(assayfiles, gsutil_cp, destination = rpath)
+            lapply(assayfiles, avcopy, destination = rpath)
         else
-            gsutil_cp(assayfiles[sampleIdx], rpath)
+            avcopy(assayfiles[sampleIdx], rpath)
     }
 
     assaydl <- list.files(rpath, pattern = "\\.txt", full.names = TRUE)
@@ -285,6 +285,7 @@ terraTCGAdata <-
     }
 }
 
+#' @importFrom AnVILGCP avtable
 .transform_clinical_to_coldata <-
     function(clinical_data, columnName, participants, workspace, namespace)
 {

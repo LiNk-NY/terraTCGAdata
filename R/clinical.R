@@ -21,6 +21,8 @@ NULL
 #' @return A tibble of Google Storage resource locations e.g.,
 #'     `gs://firecloud...`
 #'
+#' @importFrom AnVILGCP avtable
+#'
 #' @examples
 #' 
 #' if (
@@ -92,6 +94,8 @@ getClinicalTable <-
 #'
 #' @export
 #'
+#' @importFrom AnVILGCP avcopy
+#'
 #' @md
 #'
 #' @examples
@@ -135,7 +139,7 @@ getClinical <-
     if (!length(rpath)) {
         rpath <- BiocFileCache::bfcnew(bfc, rname = columnName, rtype = "local")
         dir.create(rpath)
-        gsutil_cp(clinfiles, rpath)
+        avcopy(clinfiles, rpath)
     }
     dlfiles <- list.files(rpath, full.names = TRUE, pattern = "\\.clin\\.txt$")
     mfiles <- !participantIds %in%
@@ -144,7 +148,7 @@ getClinical <-
         clindex <- match(
             participantIds[mfiles], gsub(".clin.txt", "", basename(clinfiles))
         )
-        gsutil_cp(clinfiles[clindex], rpath)
+        avcopy(clinfiles[clindex], rpath)
     }
 
     clinrows <- lapply(

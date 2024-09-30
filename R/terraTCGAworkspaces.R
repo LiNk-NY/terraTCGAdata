@@ -85,6 +85,7 @@ terraTCGAworkspace <-
 }
 
 ## from AnVIL:::.workspaces()
+#' @importFrom AnVILGCP avworkspaces
 .workspaces <- local({
     workspaces <- NULL
     function() {
