@@ -52,7 +52,11 @@ The participant table may contain curated demographic information e.g.,
 sex, age, etc.
 }
 \examples{
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+    nzchar(AnVILGCP::avworkspace_name())
+)
   getClinical(
       workspace = "TCGA_ACC_OpenAccess_V1-0_DATA",
       participantIds = c("TCGA-OR-A5J1", "TCGA-OR-A5J2",

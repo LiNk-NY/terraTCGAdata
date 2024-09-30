@@ -35,7 +35,11 @@ table for the current workspace. Along with the sample codes and frequencies,
 the output provides a description for each code and the short letter codes.
 }
 \examples{
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+    nzchar(AnVILGCP::avworkspace_name())
+)
   sampleTypesTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 
 }

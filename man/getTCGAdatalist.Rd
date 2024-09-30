@@ -46,7 +46,11 @@ A \code{list} of assay datasets
 Import Terra TCGA data as a list
 }
 \examples{
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+    nzchar(AnVILGCP::avworkspace_name())
+)
   getTCGAdatalist(
       assayNames = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",
       "snp__genome_wide_snp_6__broad_mit_edu__Level_3__segmented_scna_minus_germline_cnv_hg18__seg"),

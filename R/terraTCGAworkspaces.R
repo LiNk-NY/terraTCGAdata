@@ -35,7 +35,11 @@
 #' @md
 #'
 #' @examples
-#' if (AnVIL::gcloud_exists() && interactive()) {
+#' if (
+#'     AnVILGCP::gcloud_exists() &&
+#'     identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+#'     nzchar(AnVILGCP::avworkspace_name())
+#' ) {
 #'   selectTCGAworkspace()
 #'   terraTCGAworkspace()
 #' }

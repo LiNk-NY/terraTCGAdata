@@ -39,7 +39,11 @@ function.
 }
 \examples{
 
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+    nzchar(AnVILGCP::avworkspace_name())
+)
     getClinicalTable(
         workspace = "TCGA_ACC_OpenAccess_V1-0_DATA"
     )

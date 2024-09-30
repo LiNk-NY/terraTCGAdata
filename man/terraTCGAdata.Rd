@@ -61,7 +61,10 @@ documentation correspond to the TCGA_COAD_OpenAccess_V1 workspace that
 can be found on \url{app.terra.bio}.
 }
 \examples{
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP")
+)
   terraTCGAdata(
       clinicalName = "clin__bio__nationwidechildrens_org__Level_1__biospecimen__clin",
       assays = c("protein_exp__mda_rppa_core__mdanderson_org__Level_3__protein_normalization__data",

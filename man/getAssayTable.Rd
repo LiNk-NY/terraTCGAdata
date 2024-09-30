@@ -32,7 +32,11 @@ A tibble of pointers to resources within the Terra data model
 The column names in the output can be used in the \code{getAssayData} function.
 }
 \examples{
-if (AnVIL::gcloud_exists())
+if (
+    AnVILGCP::gcloud_exists() &&
+    identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+    nzchar(AnVILGCP::avworkspace_name())
+)
   getAssayTable(workspace = "TCGA_COAD_OpenAccess_V1-0_DATA")
 
 }

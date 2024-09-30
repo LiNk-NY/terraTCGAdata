@@ -11,9 +11,10 @@ Description: Leverage the existing open access TCGA data on Terra with
     data model without learning its complexities. With a few functions,
     you can copy / download and generate a MultiAssayExperiment from the
     TCGA example workspaces provided by Terra.
-Depends: R (>= 4.2.0), AnVIL, MultiAssayExperiment
+Depends: AnVILGCP, MultiAssayExperiment
 biocViews: Software, Infrastructure, DataImport
 Imports: 
+  AnVIL,
   BiocFileCache,
   dplyr,
   GenomicRanges,
@@ -26,6 +27,7 @@ Imports:
   TCGAutils,
   utils
 Suggests:
+  AnVILBase,
   knitr,
   rmarkdown,
   BiocStyle,
@@ -36,6 +38,6 @@ BugReports: https://github.com/waldronlab/terraTCGAdata/issues
 VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Date: 2024-08-22
