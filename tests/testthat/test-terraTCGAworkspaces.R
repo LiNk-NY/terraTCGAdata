@@ -1,5 +1,10 @@
 test_that("terraTCGAworkspace works", {
-    skip_if_not(AnVIL::gcloud_exists())
+    skip_if_not(
+        AnVILGCP::gcloud_exists() &&
+        identical(AnVILBase::avplatform_namespace(), "AnVILGCP") &&
+        nzchar(AnVILGCP::avworkspace_name())
+    )
+    
     ## Blank not in validation table
     withr::with_options(
         list("terraTCGAdata.workspace" = ""),
